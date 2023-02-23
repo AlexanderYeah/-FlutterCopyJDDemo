@@ -9,6 +9,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //
+
+  List _bannerList = [
+    {"path": "images/HomeBanner/banner_2.jpeg"},
+    {"path": "images/HomeBanner/banner_3.jpeg"},
+    {"path": "images/HomeBanner/banner_4.jpeg"},
+  ];
   // 轮播图
   Widget _swiperWidget() {
     return Container(
@@ -16,8 +23,8 @@ class _HomePageState extends State<HomePage> {
         aspectRatio: 2 / 1,
         child: Swiper(
           itemBuilder: (BuildContext context, int index) {
-            return Image.network(
-              "https://img2.baidu.com/it/u=582675930,4171146327&fm=253&fmt=auto?w=750&h=500",
+            return Image.asset(
+              _bannerList[index]["path"],
               fit: BoxFit.fill,
             );
           },
