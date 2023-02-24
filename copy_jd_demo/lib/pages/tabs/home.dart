@@ -40,6 +40,62 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // 推荐商品的数据
+  _recommendProductItemWidget() {
+    var itemWidth = (ScreenAdapter.getScreenWidth() - 20 - 10) / 2;
+    return Container(
+        width: itemWidth,
+        padding: EdgeInsets.all(10),
+        decoration:
+            BoxDecoration(border: Border.all(color: Colors.black12, width: 1)),
+        child: Column(
+          children: [
+            Container(
+                width: double.infinity,
+                // 避免服务器返回的图片比例不一致
+                child: AspectRatio(
+                  aspectRatio: 1 / 1,
+                  child: Image.network(
+                      "https://www.itying.com/images/flutter/list1.jpg"),
+                )),
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text(
+                "2023款LV大衣给你不一样的体验,奥利给,2023款LV大衣给你不一样的体验",
+                maxLines: 2,
+                // 溢出文字 ... 显示
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "¥198",
+                      style: TextStyle(color: Colors.red, fontSize: 16),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      "¥999",
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 16,
+                          decoration: TextDecoration.lineThrough),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ));
+  }
+
   // 热门商品
 
   Widget _hotProductList() {
@@ -105,10 +161,25 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: ScreenAdapter.height(15),
         ),
-        _titleWidget("你可能喜欢"),
+        _titleWidget("猜你喜欢"),
         SizedBox(height: ScreenAdapter.height(15)),
         _hotProductList(),
-        _titleWidget("你可能喜欢"),
+        _titleWidget("热门推荐"),
+        Container(
+          padding: EdgeInsets.all(10),
+          child: Wrap(
+            runSpacing: 10,
+            spacing: 10,
+            children: [
+              _recommendProductItemWidget(),
+              _recommendProductItemWidget(),
+              _recommendProductItemWidget(),
+              _recommendProductItemWidget(),
+              _recommendProductItemWidget(),
+              _recommendProductItemWidget(),
+            ],
+          ),
+        )
       ],
     );
   }
