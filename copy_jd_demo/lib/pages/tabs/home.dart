@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import '../../services/screenAdaper.dart';
 
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _titleWidget(String title) {
     return Container(
-      height: ScreenAdapter.height(30),
+      height: ScreenAdapter.height(40),
       width: ScreenAdapter.width(50),
       margin: EdgeInsets.only(left: ScreenAdapter.width(20)),
       padding: EdgeInsets.only(left: ScreenAdapter.width(20)),
@@ -29,13 +30,46 @@ class _HomePageState extends State<HomePage> {
           border: Border(
               left: BorderSide(
         color: Colors.red,
-        width: 6,
+        width: 5,
       ))),
       child: Text(title,
           style: TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.black54)),
+    );
+  }
+
+  // 热门商品
+
+  Widget _hotProductList() {
+    return Container(
+      height: ScreenAdapter.height(234),
+      padding: EdgeInsets.all(ScreenAdapter.width(20)),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return Column(
+            children: <Widget>[
+              Container(
+                height: ScreenAdapter.width(140),
+                width: ScreenAdapter.width(140),
+                margin: EdgeInsets.only(right: ScreenAdapter.width(21)),
+                child: Image.network(
+                  "https://www.itying.com/images/flutter/hot${index + 1}.jpg",
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Container(
+                height: 44,
+                padding: EdgeInsets.only(top: ScreenAdapter.width(10)),
+                child: Text("第{$index}条数据"),
+              ),
+            ],
+          );
+        },
+        itemCount: 10,
+      ),
     );
   }
 
@@ -71,9 +105,10 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: ScreenAdapter.height(15),
         ),
-        _titleWidget("You May Like"),
+        _titleWidget("你可能喜欢"),
         SizedBox(height: ScreenAdapter.height(15)),
-        _titleWidget("You May Like"),
+        _hotProductList(),
+        _titleWidget("你可能喜欢"),
       ],
     );
   }
