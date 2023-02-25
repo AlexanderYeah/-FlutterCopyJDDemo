@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import '../../services/screenAdaper.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'dart:async';
+import '../../model/homeBannerModel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,11 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //
 
-  List _bannerList = [
-    {"path": "images/HomeBanner/banner_2.jpeg"},
-    {"path": "images/HomeBanner/banner_3.jpeg"},
-    {"path": "images/HomeBanner/banner_4.jpeg"},
-  ];
+  List _bannerList = <Banners>[];
 
   //
 
@@ -38,6 +38,20 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.bold,
               color: Colors.black54)),
     );
+  }
+
+  // 获取轮播图数据
+  _getBannerData() async {
+    var api =
+        "https://result.eolink.com/GwXjH2Pcb2d5a8f8129d761e0215f79b289e468a67d2359?uri=/getHomeBanners";
+    final response = await Dio().get(api);
+    HomeBannerModel model =
+        HomeBannerModel.fromJson(json.decode(response.data));
+    setState(() {
+      if (model.banners != null) {
+        _bannerList = model.banners!;
+      }
+    });
   }
 
   // 推荐商品的数据
@@ -131,24 +145,35 @@ class _HomePageState extends State<HomePage> {
 
   // 轮播图
   Widget _swiperWidget() {
-    return Container(
-      child: AspectRatio(
-        aspectRatio: 2 / 1,
-        child: Swiper(
-          itemBuilder: (BuildContext context, int index) {
-            return Image.asset(
-              _bannerList[index]["path"],
-              fit: BoxFit.fill,
-            );
-          },
-          autoplay: true,
-          itemCount: 3,
-          // 分页器
-          pagination: SwiperPagination(),
-          // control: SwiperControl(),
+    if (_bannerList.length > 0) {
+      return Container(
+        child: AspectRatio(
+          aspectRatio: 2 / 1,
+          child: Swiper(
+            itemBuilder: (BuildContext context, int index) {
+              return Image.network(
+                _bannerList[index].pic,
+                fit: BoxFit.fill,
+              );
+            },
+            autoplay: true,
+            itemCount: _bannerList.length,
+            // 分页器
+            pagination: SwiperPagination(),
+            // control: SwiperControl(),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Text("暂无数据");
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getBannerData();
   }
 
   @override
