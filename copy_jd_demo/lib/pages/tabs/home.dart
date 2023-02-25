@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'dart:async';
 import '../../model/homeBannerModel.dart';
+import '../../config/config.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -42,8 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   // 获取轮播图数据
   _getBannerData() async {
-    var api =
-        "https://result.eolink.com/GwXjH2Pcb2d5a8f8129d761e0215f79b289e468a67d2359?uri=/getHomeBanners";
+    var api = "${Config.domain}/getHomeBanners";
     final response = await Dio().get(api);
     HomeBannerModel model =
         HomeBannerModel.fromJson(json.decode(response.data));
