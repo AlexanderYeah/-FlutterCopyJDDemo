@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:async';
 import '../../model/homeBannerModel.dart';
 import '../../config/config.dart';
+import '../../model/productListModel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,10 +17,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //
-
   List _bannerList = <Banners>[];
-
-  //
+  // 淘货精选的数据
+  List _taoHuoSelectList = <ProductItemmModel>[];
+  // 推荐列表的数据
+  List _recommendList = <ProductItemmModel>[];
 
   Widget _titleWidget(String title) {
     return Container(
@@ -54,93 +56,140 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // 推荐商品的数据
-  _recommendProductItemWidget() {
-    var itemWidth = (ScreenAdapter.getScreenWidth() - 20 - 10) / 2;
-    return Container(
-        width: itemWidth,
-        padding: EdgeInsets.all(10),
-        decoration:
-            BoxDecoration(border: Border.all(color: Colors.black12, width: 1)),
-        child: Column(
-          children: [
-            Container(
-                width: double.infinity,
-                // 避免服务器返回的图片比例不一致
-                child: AspectRatio(
-                  aspectRatio: 1 / 1,
-                  child: Image.network(
-                      "https://www.itying.com/images/flutter/list1.jpg"),
-                )),
-            Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Text(
-                "2023款LV大衣给你不一样的体验,奥利给,2023款LV大衣给你不一样的体验",
-                maxLines: 2,
-                // 溢出文字 ... 显示
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "¥198",
-                      style: TextStyle(color: Colors.red, fontSize: 16),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      "¥999",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 16,
-                          decoration: TextDecoration.lineThrough),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ));
+  // 获取淘货精选数据
+  _getTaoHuoSelectData() async {
+    var api = "${Config.domain}/taoHuoSelectList";
+    final response = await Dio().get(api);
+    ProductListModel model =
+        ProductListModel.fromJson(json.decode(response.data));
+    setState(() {
+      if (model.result != null) {
+        _taoHuoSelectList = model.result!;
+      }
+    });
   }
 
-  // 热门商品
+  // 获取热门推荐的数据
+  _getHotRommendData() async {
+    var api = "${Config.domain}/homeRecommendProductList";
+    final response = await Dio().get(api);
+    ProductListModel model =
+        ProductListModel.fromJson(json.decode(response.data));
 
-  Widget _hotProductList() {
+    setState(() {
+      if (model.result != null) {
+        _recommendList = model.result!;
+      }
+    });
+  }
+
+  // 推荐商品的数据
+  Widget recommendProductItem() {
     return Container(
-      height: ScreenAdapter.height(234),
-      padding: EdgeInsets.all(ScreenAdapter.width(20)),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return Column(
-            children: <Widget>[
-              Container(
-                height: ScreenAdapter.width(140),
-                width: ScreenAdapter.width(140),
-                margin: EdgeInsets.only(right: ScreenAdapter.width(21)),
-                child: Image.network(
-                  "https://www.itying.com/images/flutter/hot${index + 1}.jpg",
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Container(
-                height: 44,
-                padding: EdgeInsets.only(top: ScreenAdapter.width(10)),
-                child: Text("第{$index}条数据"),
-              ),
-            ],
-          );
-        },
-        itemCount: 10,
-      ),
+      padding: EdgeInsets.all(10),
+      child: Wrap(
+          runSpacing: 10,
+          spacing: 10,
+          children: _recommendList.map((element) {
+            if (_taoHuoSelectList.length > 0) {
+              var itemWidth = (ScreenAdapter.getScreenWidth() - 20 - 10) / 2;
+              return Container(
+                  width: itemWidth,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black12, width: 1)),
+                  child: Column(
+                    children: [
+                      Container(
+                          width: double.infinity,
+                          // 避免服务器返回的图片比例不一致
+                          child: AspectRatio(
+                            aspectRatio: 1 / 1,
+                            child: Image.network(element.pic),
+                          )),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text(
+                          element.title,
+                          maxLines: 2,
+                          // 溢出文字 ... 显示
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "¥${element.price}",
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 16),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "¥${element.oldPrice}",
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 16,
+                                    decoration: TextDecoration.lineThrough),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ));
+            } else {
+              return Text("加载中");
+            }
+          }).toList()),
     );
+  }
+
+  // 淘货精选
+  Widget _hotProductList() {
+    if (_taoHuoSelectList.length != 0) {
+      return Container(
+        height: ScreenAdapter.height(234),
+        padding: EdgeInsets.all(ScreenAdapter.width(20)),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Column(
+              children: <Widget>[
+                Container(
+                  height: ScreenAdapter.width(140),
+                  width: ScreenAdapter.width(140),
+                  margin: EdgeInsets.only(right: ScreenAdapter.width(21)),
+                  child: Image.network(
+                    _taoHuoSelectList[index].pic,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                Container(
+                  height: 44,
+                  width: ScreenAdapter.width(140),
+                  padding: EdgeInsets.only(top: ScreenAdapter.width(10)),
+                  child: Text(
+                    "¥${_taoHuoSelectList[index].price}",
+                    style: TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            );
+          },
+          itemCount: _taoHuoSelectList.length,
+        ),
+      );
+    } else {
+      return Text("淘货精选");
+    }
   }
 
   // 轮播图
@@ -174,6 +223,8 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     _getBannerData();
+    _getTaoHuoSelectData();
+    _getHotRommendData();
   }
 
   @override
@@ -186,25 +237,11 @@ class _HomePageState extends State<HomePage> {
         SizedBox(
           height: ScreenAdapter.height(15),
         ),
-        _titleWidget("猜你喜欢"),
+        _titleWidget("淘货精选"),
         SizedBox(height: ScreenAdapter.height(15)),
         _hotProductList(),
         _titleWidget("热门推荐"),
-        Container(
-          padding: EdgeInsets.all(10),
-          child: Wrap(
-            runSpacing: 10,
-            spacing: 10,
-            children: [
-              _recommendProductItemWidget(),
-              _recommendProductItemWidget(),
-              _recommendProductItemWidget(),
-              _recommendProductItemWidget(),
-              _recommendProductItemWidget(),
-              _recommendProductItemWidget(),
-            ],
-          ),
-        )
+        recommendProductItem(),
       ],
     );
   }
