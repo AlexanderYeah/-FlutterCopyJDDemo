@@ -14,13 +14,16 @@ class Tabs extends StatefulWidget {
 class _TabsState extends State<Tabs> {
   int _selectedIdx = 0;
 
+  PageController? _pageController;
+
   @override
   void initState() {
     super.initState();
     _selectedIdx = 0;
+    this._pageController = PageController(initialPage: this._selectedIdx);
   }
 
-  List pageList = [HomePage(), CategoryPage(), CartPage(), UserPage()];
+  List _pageList = [HomePage(), CategoryPage(), CartPage(), UserPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,10 @@ class _TabsState extends State<Tabs> {
       appBar: AppBar(
         title: Text("AppBAR"),
       ),
-      body: pageList[_selectedIdx],
+      body: PageView(
+        controller: this._pageController,
+        children: [HomePage(), CategoryPage(), CartPage(), UserPage()],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIdx,
@@ -36,6 +42,7 @@ class _TabsState extends State<Tabs> {
         onTap: (idx) {
           setState(() {
             _selectedIdx = idx;
+            this._pageController!.jumpToPage(idx);
           });
         },
         items: [

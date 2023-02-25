@@ -44,6 +44,7 @@ Map categoryData = {
           'http://s1.inewhope.com/images/202209/goods_img/90336_P_1662077713828.png',
     },
   ],
+
   // 第二个类目
   "办公器材": [
     {
