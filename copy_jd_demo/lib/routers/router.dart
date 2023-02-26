@@ -5,6 +5,7 @@ import '../pages/tabs/home.dart';
 import '../pages/tabs/category.dart';
 import '../pages/tabs/user.dart';
 import '../pages/tabs/cart.dart';
+import '../pages/productList.dart';
 
 //配置路由
 final routes = {
@@ -12,7 +13,9 @@ final routes = {
   '/home': (context) => HomePage(),
   '/category': (context) => CategoryPage(),
   '/user': (context) => UserPage(),
-  '/cart': (context) => CartPage()
+  '/cart': (context) => CartPage(),
+  '/productList': (context, {arguments}) =>
+      ProductListPage(arguments: arguments)
 };
 
 //固定写法

@@ -91,19 +91,27 @@ class _CategoryPageState extends State<CategoryPage>
                 // 数量
                 itemCount: _rightItemList.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    color: Colors.white,
+                  return InkWell(
+                    // 跳转分类界面
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed("/productList", arguments: {"aaa": "bbb"});
+                    },
                     child: Container(
-                      child: Column(
-                        children: [
-                          AspectRatio(
-                              aspectRatio: 1 / 1,
-                              child: Image.network(_rightItemList[index].pic)),
-                          Container(
-                            height: ScreenAdapter.height(28),
-                            child: Text(_rightItemList[index].title),
-                          )
-                        ],
+                      color: Colors.white,
+                      child: Container(
+                        child: Column(
+                          children: [
+                            AspectRatio(
+                                aspectRatio: 1 / 1,
+                                child:
+                                    Image.network(_rightItemList[index].pic)),
+                            Container(
+                              height: ScreenAdapter.height(28),
+                              child: Text(_rightItemList[index].title),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );

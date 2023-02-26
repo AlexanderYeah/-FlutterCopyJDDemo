@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'cart.dart';
 import 'home.dart';
 import 'user.dart';
-import 'category.dart';
+import '../tabs/category.dart';
 
 class Tabs extends StatefulWidget {
   const Tabs({super.key});
