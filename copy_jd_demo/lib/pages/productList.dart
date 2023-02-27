@@ -15,7 +15,6 @@ class ProductListPage extends StatefulWidget {
 
 class _ProductListPageState extends State<ProductListPage> {
   @override
-
   // 定义一个全局的key
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
   // 分页
@@ -23,8 +22,23 @@ class _ProductListPageState extends State<ProductListPage> {
   // 数据
   List _productList = [];
   // 排序
-  String sort = "";
+  String _sort = "";
   //
+  List _tabHeaderList = [
+    {
+      "id": 1,
+      "title": "综合",
+      "fileds": "all",
+      "sort":
+          -1, //排序     升序：price_1     {price:1}        降序：price_-1   {price:-1}
+    },
+    {"id": 2, "title": "销量", "fileds": 'salecount', "sort": -1},
+    {"id": 3, "title": "价格", "fileds": 'price', "sort": -1},
+    // {"id": 4, "title": "筛选"}
+  ];
+
+  int _selectedTabIndex = 1;
+
   ScrollController _scrollController = ScrollController();
   // 请求开关 当本次请求回来之前 不进行下次请求
   bool _requestFlag = true;
@@ -40,7 +54,6 @@ class _ProductListPageState extends State<ProductListPage> {
       if (_scrollController.position.pixels >
           _scrollController.position.maxScrollExtent - 20) {
         _page++;
-        print("滑动到了底部${_page}");
         // 可以请求的时候 再去请求
         if (_requestFlag && _haveMore) {
           _getProductListData();
@@ -57,16 +70,44 @@ class _ProductListPageState extends State<ProductListPage> {
     productListData.forEach((key, value) {
       if (key == "phone") {
         List tempList = productListData[key];
+        // 这里进行一个copy 操作，因为排序直接回改变原来list的数据结构
+        List resultList = [];
+        resultList.addAll(tempList);
+        // 看是否有排序操作
+        switch (this._sort) {
+          case "salecount_1":
+            // 销量升序
+            resultList.sort((left, right) =>
+                left["salecount"].compareTo(right["salecount"]));
+            break;
+          case "salecount_-1":
+            // 销量降序
+            resultList.sort((left, right) =>
+                right["salecount"].compareTo(left["salecount"]));
+            break;
+          case "price_1":
+            // 价格升序
+            resultList
+                .sort((left, right) => left["price"].compareTo(right["price"]));
+            break;
+          case "price_-1":
+            // 价格降序
+            resultList
+                .sort((left, right) => right["price"].compareTo(left["price"]));
+            break;
+          default:
+        }
 
         _productList.clear();
-        for (var i = 0; i < tempList.length; i++) {
-          Map<String, dynamic> element = tempList[i];
-          if (i < _page * 10) {
+        for (var i = 0; i < resultList.length; i++) {
+          Map<String, dynamic> element = resultList[i];
+          if (i < _page * 2000) {
             _productList.add(ProductItemmModel.fromJson(element));
           }
         }
+        print(_productList.first.title);
         // 如果没有数据 就不用请求数据了
-        if (tempList.length < _page * 10) {
+        if (resultList.length < _page * 10) {
           _haveMore = false;
         } else {
           _haveMore = true;
@@ -142,6 +183,17 @@ class _ProductListPageState extends State<ProductListPage> {
     }
   }
 
+  Widget _showTabHeaderArrowIcon(index) {
+    // 只有销量和价格才有箭头
+    if (index == 2 || index == 3) {
+      if (this._tabHeaderList[index - 1]["sort"] == 1) {
+        return Icon(Icons.arrow_drop_down);
+      }
+      return Icon(Icons.arrow_drop_up);
+    }
+    return Text("");
+  }
+
   // 筛选浮动导航
   Widget tabHeaderWidget() {
     return Positioned(
@@ -156,68 +208,37 @@ class _ProductListPageState extends State<ProductListPage> {
           width: ScreenAdapter.width(750),
           height: ScreenAdapter.height(80),
           child: Row(
-            children: <Widget>[
-              Expanded(
-                  flex: 1,
-                  child: InkWell(
-                    onTap: () {},
-                    child: Padding(
+              children: this._tabHeaderList.map((value) {
+            // 这个地方动态循环遍历去创建顶部的导航栏按钮
+            return Expanded(
+                flex: 1,
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      //点击改变索引值
+                      _tabHeaderChange(value["id"]);
+                    });
+                  },
+                  child: Padding(
                       padding: EdgeInsets.fromLTRB(0, ScreenAdapter.height(10),
                           0, ScreenAdapter.height(10)),
-                      child: Text(
-                        "综合",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: InkWell(
-                    onTap: () {},
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(0, ScreenAdapter.height(10),
-                          0, ScreenAdapter.height(10)),
-                      child: Text(
-                        "筛选",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: InkWell(
-                      onTap: () {},
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            0,
-                            ScreenAdapter.height(10),
-                            0,
-                            ScreenAdapter.height(10)),
-                        child: Text(
-                          "价格",
-                          textAlign: TextAlign.center,
-                        ),
-                      ))),
-              Expanded(
-                  flex: 1,
-                  child: InkWell(
-                      onTap: () {
-                        _scaffoldkey.currentState!.openEndDrawer();
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            0,
-                            ScreenAdapter.height(10),
-                            0,
-                            ScreenAdapter.height(10)),
-                        child: Text(
-                          "筛选",
-                          textAlign: TextAlign.center,
-                        ),
-                      )))
-            ],
-          ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${value['title']}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: this._selectedTabIndex == value["id"]
+                                    ? Colors.red
+                                    : Colors.black,
+                                fontSize: 17),
+                          ),
+                          _showTabHeaderArrowIcon(value['id']),
+                        ],
+                      )),
+                ));
+          }).toList()),
         ));
   }
 
@@ -231,6 +252,37 @@ class _ProductListPageState extends State<ProductListPage> {
       return (index == this._productList.length - 1)
           ? Text("--------我是有底线的-------")
           : Text("");
+    }
+  }
+
+  /**-----点击事件方法-------*/
+  _tabHeaderChange(index) {
+    if (index == 4) {
+      // 点击了筛选 打开侧边栏
+      _scaffoldkey.currentState!.openEndDrawer();
+      setState(() {
+        this._selectedTabIndex = index;
+      });
+    } else {
+      setState(() {
+        //1  重置分页
+        _page = 1;
+        _haveMore = true;
+        //2 清空数据
+        _productList.clear();
+        //3 设置排序
+        // 这里记住置反操作 升序与降序,反复点击就没问题了
+        this._tabHeaderList[index - 1]["sort"] =
+            this._tabHeaderList[index - 1]["sort"] * -1;
+        _sort =
+            "${this._tabHeaderList[index - 1]["fileds"]}_${this._tabHeaderList[index - 1]["sort"]}";
+
+        //4 滚动到顶部
+        // _scrollController.jumpTo(0);
+        print(this._sort);
+        _getProductListData();
+        this._selectedTabIndex = index;
+      });
     }
   }
 
