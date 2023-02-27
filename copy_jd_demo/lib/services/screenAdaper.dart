@@ -28,4 +28,9 @@ class ScreenAdapter {
   static getScreenHeight() {
     return ScreenUtil().screenHeight;
   }
+
+  // 适配字体大小
+  static fontSize(double value) {
+    return ScreenUtil().setSp(value);
+  }
 }
