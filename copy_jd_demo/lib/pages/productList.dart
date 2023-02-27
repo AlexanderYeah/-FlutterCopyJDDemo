@@ -15,6 +15,9 @@ class ProductListPage extends StatefulWidget {
 
 class _ProductListPageState extends State<ProductListPage> {
   @override
+  //  配置search 搜索框的值
+  var _initKeywordsController = TextEditingController();
+
   // 定义一个全局的key
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
   // 分页
@@ -48,6 +51,14 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   void initState() {
     super.initState();
+
+    // 给搜索框赋值
+    if (widget.arguments["keywords"] != null) {
+      _initKeywordsController.text = widget.arguments["keywords"];
+    } else {
+      _initKeywordsController.text = "";
+    }
+
     _getProductListData();
     // 监听scrollController 的滚动事件
     _scrollController.addListener(() {
@@ -290,10 +301,41 @@ class _ProductListPageState extends State<ProductListPage> {
     ScreenAdapter.init(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text("商品列表"),
-          // 把text 置为空,是为了去掉右上方打开抽屉的的菜单栏
+          title: Container(
+            child: TextField(
+              // 绑定控制器,接收传递过来的值
+              controller: _initKeywordsController,
+              onChanged: (value) {
+                // this._keywords = value;
+              },
+              // 首次进来 收起键盘
+              autofocus: false,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide.none)),
+            ),
+            height: ScreenAdapter.height(60),
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(233, 233, 233, 0.8),
+                borderRadius: BorderRadius.circular(30)),
+          ),
           actions: [
-            Text(""),
+            InkWell(
+              onTap: () {
+                // 在商品列表点击搜索 直接重新请求接口
+                _tabHeaderChange(2);
+              },
+              child: Container(
+                margin: EdgeInsets.fromLTRB(0, 15, 15, 0),
+                height: ScreenAdapter.height(68),
+                width: ScreenAdapter.width(80),
+                child: Text(
+                  "搜索",
+                  style: TextStyle(color: Colors.black87, fontSize: 17),
+                ),
+              ),
+            )
           ],
         ),
         endDrawer: Drawer(

@@ -3,12 +3,13 @@ import '../services/screenAdaper.dart';
 
 class ProductSearchPage extends StatefulWidget {
   const ProductSearchPage({super.key});
-
   @override
   State<ProductSearchPage> createState() => _ProductSearchPageState();
 }
 
 class _ProductSearchPageState extends State<ProductSearchPage> {
+  var _keywords;
+
   @override
   Widget build(BuildContext context) {
     ScreenAdapter.init(context);
@@ -16,6 +17,9 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
         appBar: AppBar(
           title: Container(
             child: TextField(
+              onChanged: (value) {
+                this._keywords = value;
+              },
               // 首次进来 收起键盘
               autofocus: false,
               decoration: InputDecoration(
@@ -31,7 +35,9 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
           actions: [
             InkWell(
               onTap: () {
-                // 搜索按钮的点击
+                // 搜索按钮的点击 模拟传递参数
+                Navigator.of(context).pushReplacementNamed("/productList",
+                    arguments: {"keywords": this._keywords});
               },
               child: Container(
                 margin: EdgeInsets.fromLTRB(0, 15, 15, 0),
