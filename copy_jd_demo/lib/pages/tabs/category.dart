@@ -139,12 +139,11 @@ class _CategoryPageState extends State<CategoryPage>
     String selectedTitle = _leftTitleList[index];
 
     List tempList = categoryData[selectedTitle];
-    print(selectedTitle);
+
     _rightItemList.clear();
     tempList.forEach((value) {
       _rightItemList.add(CategoryItemModel.fromJson(value));
     });
-    print(_rightItemList);
   }
 
   /**------------LifeCycle------------**/

@@ -65,5 +65,17 @@ Map categoryData = {
       "pic":
           'http://s1.inewhope.com/images/202104/goods_img/54646_G_1618249176860.jpg'
     },
+    {
+      "pid": 'socket',
+      "title": '插线板',
+      "pic":
+          'http://s1.inewhope.com/images/201910/goods_img/32785_G_1570990057926.jpg'
+    },
+    {
+      "pid": 'shredder',
+      "title": '碎纸机',
+      "pic":
+          'http://s1.inewhope.com/images/202203/goods_img/40513_P_1648093069343.png'
+    },
   ]
 };
