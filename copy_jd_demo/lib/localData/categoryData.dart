@@ -46,12 +46,24 @@ Map categoryData = {
   ],
 
   // 第二个类目
-  "办公器材": [
+  "办公设备": [
     {
-      "pid": 'phone',
-      "title": '手机',
+      "pid": 'printer',
+      "title": '打印机',
       "pic":
-          'http://s1.inewhope.com/images/202209/goods_img/90765_P_1662943319519.jpg',
+          'http://s1.inewhope.com/images/201711/goods_img/26847_P_1511293384603.jpg',
+    },
+    {
+      "pid": 'scanner',
+      "title": '扫描仪',
+      "pic":
+          'http://s1.inewhope.com/images/202209/goods_img/90955_G_1663280878929.jpg',
+    },
+    {
+      "pid": 'check',
+      "title": '考勤机',
+      "pic":
+          'http://s1.inewhope.com/images/202104/goods_img/54646_G_1618249176860.jpg'
     },
   ]
 };
