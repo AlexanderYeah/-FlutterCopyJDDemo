@@ -17,8 +17,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Tabs(),
-        initialRoute: "/productList",
-        onGenerateRoute: onGenerateRoute);
+        home: Tabs(), initialRoute: "/", onGenerateRoute: onGenerateRoute);
   }
 }
