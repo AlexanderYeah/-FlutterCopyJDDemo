@@ -4,13 +4,15 @@ import '../services/screenAdaper.dart';
 class ProductListPage extends StatefulWidget {
   Map arguments;
   ProductListPage({Key? key, required this.arguments}) : super(key: key);
-
   @override
   State<ProductListPage> createState() => _ProductListPageState();
 }
 
 class _ProductListPageState extends State<ProductListPage> {
   @override
+
+  // 定义一个全局的key
+  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
 
   /**------UI---------*/
   // 商品列表
@@ -128,7 +130,9 @@ class _ProductListPageState extends State<ProductListPage> {
               Expanded(
                   flex: 1,
                   child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        _scaffoldkey.currentState!.openEndDrawer();
+                      },
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(
                             0,
@@ -150,7 +154,17 @@ class _ProductListPageState extends State<ProductListPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text("商品列表"),
+          // 把text 置为空,是为了去掉右上方打开抽屉的的菜单栏
+          actions: [
+            Text(""),
+          ],
         ),
+        endDrawer: Drawer(
+          child: Container(
+            child: Text("data"),
+          ),
+        ),
+        key: _scaffoldkey,
         body: Stack(
           children: <Widget>[
             // 列表
