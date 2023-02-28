@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Tabs(),
-      initialRoute: "/productSearch",
+      initialRoute: "/",
       onGenerateRoute: onGenerateRoute,
       theme: ThemeData(
           colorScheme: ColorScheme(
