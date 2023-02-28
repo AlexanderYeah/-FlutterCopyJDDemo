@@ -98,57 +98,64 @@ class _HomePageState extends State<HomePage>
           children: _recommendList.map((element) {
             if (_taoHuoSelectList.length > 0) {
               var itemWidth = (ScreenAdapter.getScreenWidth() - 20 - 10) / 2;
-              return Container(
-                  width: itemWidth,
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black12, width: 1)),
-                  child: Column(
-                    children: [
-                      Container(
-                          width: double.infinity,
-                          // 避免服务器返回的图片比例不一致
-                          child: AspectRatio(
-                            aspectRatio: 1 / 1,
-                            child: Image.network(element.pic),
-                          )),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text(
-                          element.title,
-                          maxLines: 2,
-                          // 溢出文字 ... 显示
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.black),
+              return InkWell(
+                // 点击事件
+                onTap: () {
+                  // Navigator.of(context).pushNamed('/cart');
+                  Navigator.of(context).pushNamed("/productDetail");
+                },
+                child: Container(
+                    width: itemWidth,
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black12, width: 1)),
+                    child: Column(
+                      children: [
+                        Container(
+                            width: double.infinity,
+                            // 避免服务器返回的图片比例不一致
+                            child: AspectRatio(
+                              aspectRatio: 1 / 1,
+                              child: Image.network(element.pic),
+                            )),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text(
+                            element.title,
+                            maxLines: 2,
+                            // 溢出文字 ... 显示
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "¥${element.price}",
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 16),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "¥${element.price}",
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: 16),
+                                ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                "¥${element.oldPrice}",
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 16,
-                                    decoration: TextDecoration.lineThrough),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ));
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  "¥${element.oldPrice}",
+                                  style: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 16,
+                                      decoration: TextDecoration.lineThrough),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    )),
+              );
             } else {
               return Text("加载中");
             }

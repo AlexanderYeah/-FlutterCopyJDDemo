@@ -31,7 +31,6 @@ class _ProductSearchPageState extends State<ProductSearchPage> {
 
   /*---------Data Handle------*/
   _getHistoryData() async {
-    // await SearchServices.clearHistoryList();
     var _historyListData = await SearchServices.getHistoryList();
     // 这里一定要更新数据源
     setState(() {

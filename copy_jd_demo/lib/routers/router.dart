@@ -7,6 +7,7 @@ import '../pages/tabs/user.dart';
 import '../pages/tabs/cart.dart';
 import '../pages/productList.dart';
 import '../pages/productSearch.dart';
+import '../pages/productDetail.dart';
 
 //配置路由
 final routes = {
@@ -16,6 +17,7 @@ final routes = {
   '/user': (context) => UserPage(),
   '/cart': (context) => CartPage(),
   '/productSearch': (context) => ProductSearchPage(),
+  '/productDetail': (context) => ProductDetailPage(),
   '/productList': (context, {arguments}) =>
       ProductListPage(arguments: arguments)
 };
