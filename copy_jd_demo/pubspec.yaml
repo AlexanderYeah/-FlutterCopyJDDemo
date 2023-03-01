@@ -40,6 +40,7 @@ dependencies:
   flutter_screenutil: ^5.6.1
   dio: ^5.0.1
   shared_preferences: ^2.0.18
+  flutter_inappwebview: ^5.7.2+3
 dev_dependencies:
   flutter_test:
     sdk: flutter

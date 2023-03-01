@@ -40,7 +40,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         children: [
           TabBarView(children: <Widget>[
             ProductDetailGoodsPage(model: this._model),
-            ProductDetailInfoPage(),
+            ProductDetailInfoPage(model: this._model),
             ProductDetailCommentPage(),
           ]),
           Positioned(

@@ -5,6 +5,7 @@ class ProductDetailModel {
   double? price;
   double? oldPrice;
   int? saleCount;
+  String? detainInfoUrl;
   List<ProductArrtributModel>? arrtributes;
 
   ProductDetailModel(
@@ -14,6 +15,7 @@ class ProductDetailModel {
       this.price,
       this.oldPrice,
       this.saleCount,
+      this.detainInfoUrl,
       this.arrtributes});
 
   ProductDetailModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class ProductDetailModel {
     price = json['price'];
     oldPrice = json['oldPrice'];
     saleCount = json['saleCount'];
+    detainInfoUrl = json['detainInfoUrl'];
     if (json['arrtributes'] != null) {
       arrtributes = <ProductArrtributModel>[];
       json['arrtributes'].forEach((v) {
@@ -39,6 +42,7 @@ class ProductDetailModel {
     data['price'] = this.price;
     data['oldPrice'] = this.oldPrice;
     data['saleCount'] = this.saleCount;
+    data['detainInfoUrl'] = this.detainInfoUrl;
     if (this.arrtributes != null) {
       data['arrtributes'] = this.arrtributes!.map((v) => v.toJson()).toList();
     }

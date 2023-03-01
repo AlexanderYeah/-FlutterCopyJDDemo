@@ -9,6 +9,7 @@ Map<String, dynamic> productDetailData = {
   "price": 66.9,
   "oldPrice": 99.9,
   "saleCount": 782,
+  "detainInfoUrl": "https://jd.itying.com/pcontent?id=5a0425bc010e711234661439",
   "arrtributes": [
     {
       "cate": "颜色",
