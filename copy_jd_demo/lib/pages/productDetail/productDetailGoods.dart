@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/screenAdaper.dart';
+import '../../widget/jdProductButton.dart';
 
 class ProductDetailGoodsPage extends StatefulWidget {
   const ProductDetailGoodsPage({super.key});
@@ -10,6 +11,107 @@ class ProductDetailGoodsPage extends StatefulWidget {
 
 class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
   @override
+
+  /*****----Actions-----***/
+  // 底部踏出菜单 高度具体多少 还是要根据服务端的数据进行一个计算比较合适
+  _showFilterBottomView(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                // 点击不消失
+                // Navigator.of(context).pop();
+              },
+              child: Stack(
+                children: [
+                  // 上方的选择条件
+                  Container(
+                    color: Colors.white,
+                    margin: EdgeInsets.all(10),
+                    child: ListView(
+                      // 使用warp 嵌套 wrap 的方式
+                      children: [
+                        Wrap(
+                          children: [
+                            Wrap(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(10, 18, 0, 0),
+                                  width: ScreenAdapter.width(100),
+                                  child: Text(
+                                    "颜色:",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenAdapter.fontSize(32)),
+                                  ),
+                                ),
+                                Container(
+                                  width: ScreenAdapter.width(586),
+                                  child: Wrap(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.all(5),
+                                        child: Chip(
+                                          label: Text(
+                                            "Apple",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    ScreenAdapter.fontSize(32)),
+                                          ),
+                                          padding: EdgeInsets.all(5),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  // 下方的按钮
+                  Positioned(
+                      bottom: 0,
+                      width: ScreenAdapter.width(750),
+                      height: ScreenAdapter.height(90),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                top: BorderSide(
+                                    color: Color.fromRGBO(233, 233, 233, 1),
+                                    width: 1))),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child: JDProductButton(
+                                  color: Color.fromRGBO(253, 1, 0, 0.9),
+                                  text: "加入购物车",
+                                  callback: () {
+                                    print("加入购物车");
+                                  },
+                                )),
+                            Expanded(
+                                flex: 1,
+                                child: JDProductButton(
+                                  color: Color.fromRGBO(255, 165, 0, 0.9),
+                                  text: "立即购买",
+                                  callback: () {
+                                    print("立即购买");
+                                  },
+                                ))
+                          ],
+                        ),
+                      ))
+                ],
+              ));
+        });
+  }
+
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
@@ -81,24 +183,29 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
             ),
           ),
           // 已经选择的SKU
-          Container(
-            height: ScreenAdapter.height(80),
-            child: Row(
-              children: [
-                Text(
-                  "已选:",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: ScreenAdapter.fontSize(32)),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "115, 黑色, XL, 1件 ",
-                  style: TextStyle(fontSize: ScreenAdapter.fontSize(30)),
-                )
-              ],
+          InkWell(
+            onTap: () {
+              _showFilterBottomView(context);
+            },
+            child: Container(
+              height: ScreenAdapter.height(80),
+              child: Row(
+                children: [
+                  Text(
+                    "已选:",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenAdapter.fontSize(32)),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "115, 黑色, XL, 1件 ",
+                    style: TextStyle(fontSize: ScreenAdapter.fontSize(30)),
+                  )
+                ],
+              ),
             ),
           ),
           Divider(
