@@ -1,9 +1,13 @@
+import 'package:copy_jd_demo/localData/productDetailData.dart';
 import 'package:flutter/material.dart';
 import '../../services/screenAdaper.dart';
 import '../../widget/jdProductButton.dart';
+import '../../model/productDetailModel.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 class ProductDetailGoodsPage extends StatefulWidget {
-  const ProductDetailGoodsPage({super.key});
+  var model;
+  ProductDetailGoodsPage({super.key, this.model});
 
   @override
   State<ProductDetailGoodsPage> createState() => _ProductDetailGoodsPageState();
@@ -11,6 +15,56 @@ class ProductDetailGoodsPage extends StatefulWidget {
 
 class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
   @override
+  ProductDetailModel _detailModel = ProductDetailModel();
+  /*****---DataHandle-----***/
+  @override
+  void initState() {
+    super.initState();
+    _detailModel = widget.model;
+    print(_detailModel.title);
+  }
+
+  List<Widget> _categoryWidget() {
+    List<Widget> tempList = [];
+
+    this._detailModel.arrtributes!.forEach((element) {
+      tempList.add(Wrap(
+        children: [
+          Wrap(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(10, 18, 0, 0),
+                width: ScreenAdapter.width(100),
+                child: Text(
+                  "${element.cate}",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: ScreenAdapter.fontSize(32)),
+                ),
+              ),
+              Container(
+                width: ScreenAdapter.width(586),
+                child: Wrap(
+                    children: element.list!.map((value) {
+                  return Container(
+                    margin: EdgeInsets.all(5),
+                    child: Chip(
+                      label: Text(
+                        "${value}",
+                        style: TextStyle(fontSize: ScreenAdapter.fontSize(32)),
+                      ),
+                      padding: EdgeInsets.all(5),
+                    ),
+                  );
+                }).toList()),
+              )
+            ],
+          )
+        ],
+      ));
+    });
+    return tempList;
+  }
 
   /*****----Actions-----***/
   // 底部踏出菜单 高度具体多少 还是要根据服务端的数据进行一个计算比较合适
@@ -32,45 +86,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
                     margin: EdgeInsets.all(10),
                     child: ListView(
                       // 使用warp 嵌套 wrap 的方式
-                      children: [
-                        Wrap(
-                          children: [
-                            Wrap(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(10, 18, 0, 0),
-                                  width: ScreenAdapter.width(100),
-                                  child: Text(
-                                    "颜色:",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: ScreenAdapter.fontSize(32)),
-                                  ),
-                                ),
-                                Container(
-                                  width: ScreenAdapter.width(586),
-                                  child: Wrap(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.all(5),
-                                        child: Chip(
-                                          label: Text(
-                                            "Apple",
-                                            style: TextStyle(
-                                                fontSize:
-                                                    ScreenAdapter.fontSize(32)),
-                                          ),
-                                          padding: EdgeInsets.all(5),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        )
-                      ],
+                      children: _categoryWidget(),
                     ),
                   ),
                   // 下方的按钮
@@ -114,28 +130,41 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
 
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(0),
       child: ListView(
         children: <Widget>[
           // 图片
           AspectRatio(
-            aspectRatio: 1 / 1,
-            child: Image.network(
-                "http://s1.inewhope.com/images/202205/goods_img/81892_P_1653264710271.png",
-                fit: BoxFit.fill),
-          ),
+              aspectRatio: 1 / 1,
+              child: Swiper(
+                // 分页器
+                pagination: SwiperPagination(
+                    builder: DotSwiperPaginationBuilder(
+                        space: 5,
+                        color: Colors.white,
+                        activeColor: Colors.redAccent,
+                        activeSize: 13)),
+
+                itemCount: this._detailModel.imgs!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Image.network(this._detailModel.imgs![index],
+                      fit: BoxFit.fill);
+                },
+              )),
           // 主标题
           Container(
-            padding: EdgeInsets.only(top: 10),
-            child: Text("飞利浦 SPB2180WB/93 新国标安全插座 8位总控",
+            margin: EdgeInsets.fromLTRB(10, 2, 10, 2),
+            // padding: EdgeInsets.only(top: 10),
+            child: Text(_detailModel.title!,
                 maxLines: 3,
                 style: TextStyle(
                     color: Colors.black, fontSize: ScreenAdapter.fontSize(36))),
           ),
           // 副标题
           Container(
-            padding: EdgeInsets.only(top: 3),
-            child: Text("儿童保护门 插线板/插排/排插/接线板/拖线板 3米 居家办公超级实用(大品牌 值得信赖)",
+            margin: EdgeInsets.fromLTRB(10, 2, 10, 2),
+            padding: EdgeInsets.only(top: 1),
+            child: Text(_detailModel.subTitle!,
                 maxLines: 3,
                 style: TextStyle(
                     color: Colors.black38,
@@ -143,6 +172,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
           ),
           // 价格
           Container(
+            margin: EdgeInsets.fromLTRB(10, 2, 10, 2),
             padding: EdgeInsets.only(top: 10),
             child: Row(
               children: [
@@ -155,7 +185,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
                           width: 4,
                         ),
                         Text(
-                          "¥28",
+                          "¥${this._detailModel.price}",
                           style: TextStyle(
                               color: Colors.redAccent,
                               fontSize: ScreenAdapter.fontSize(44)),
@@ -172,7 +202,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
                           width: 4,
                         ),
                         Text(
-                          "¥99",
+                          "¥${this._detailModel.oldPrice}",
                           style: TextStyle(
                               color: Colors.black38,
                               fontSize: ScreenAdapter.fontSize(32)),
@@ -188,6 +218,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
               _showFilterBottomView(context);
             },
             child: Container(
+              margin: EdgeInsets.fromLTRB(10, 2, 10, 2),
               height: ScreenAdapter.height(80),
               child: Row(
                 children: [
@@ -212,6 +243,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
             height: 1,
           ),
           Container(
+            margin: EdgeInsets.fromLTRB(10, 2, 10, 2),
             height: ScreenAdapter.height(80),
             child: Row(
               children: [
