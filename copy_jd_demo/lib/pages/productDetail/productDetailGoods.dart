@@ -19,6 +19,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
   // 选中的值
   String _selectedAttrValue = "";
   List _attr = [];
+
   /*****---DataHandle-----***/
   @override
   void initState() {
