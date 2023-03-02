@@ -1,5 +1,7 @@
+import 'package:copy_jd_demo/services/screenAdaper.dart';
 import 'package:flutter/material.dart';
 import '../../localData/productCommentData.dart';
+import '../../services/screenAdaper.dart';
 
 class ProductDetailCommentPage extends StatefulWidget {
   const ProductDetailCommentPage({super.key});
@@ -21,6 +23,30 @@ class _ProductDetailCommentPageState extends State<ProductDetailCommentPage>
     super.initState();
     _commentData = productCommentData;
     setState(() {});
+  }
+
+  List<Widget> _picListData(element) {
+    List<Widget> tempList = [];
+    tempList.add(Image.network(element[0], fit: BoxFit.cover));
+
+    return tempList;
+  }
+
+  Widget _commentPicsWidget(element) {
+    int totalCount = element.length;
+    double itemW = (ScreenAdapter.width(750) - 50) / 3;
+    double height = totalCount * 130;
+    if (element.length != 0) {
+      return Container(
+        margin: EdgeInsets.fromLTRB(0, 10, 10, 10),
+        width: itemW,
+        child: Wrap(
+          children: element.length != 0 ? _picListData(element) : [Text("")],
+        ),
+      );
+    } else {
+      return Text("");
+    }
   }
 
   @override
@@ -60,6 +86,8 @@ class _ProductDetailCommentPageState extends State<ProductDetailCommentPage>
                     style: TextStyle(fontSize: 16, color: Colors.black45),
                   ),
                 ),
+                // 返回图片
+                _commentPicsWidget(this._commentData[index]["imgs"]),
                 Divider(
                   height: 20,
                 )

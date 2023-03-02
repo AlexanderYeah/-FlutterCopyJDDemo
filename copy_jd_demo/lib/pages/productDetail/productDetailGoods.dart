@@ -366,6 +366,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
               ],
             ),
           ),
+
           Divider(
             height: 1,
           ),
