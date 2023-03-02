@@ -53,18 +53,20 @@ class ProductDetailModel {
 class ProductArrtributModel {
   String? cate;
   List<String>? list;
-
+  List<Map>? attrList;
   ProductArrtributModel({this.cate, this.list});
 
   ProductArrtributModel.fromJson(Map<String, dynamic> json) {
     cate = json['cate'];
     list = json['list'].cast<String>();
+    attrList = [];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['cate'] = this.cate;
     data['list'] = this.list;
+
     return data;
   }
 }
