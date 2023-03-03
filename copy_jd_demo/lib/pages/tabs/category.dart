@@ -156,11 +156,46 @@ class _CategoryPageState extends State<CategoryPage>
   @override
   Widget build(BuildContext context) {
     ScreenAdapter.init(context);
-    return Row(children: [
-      // 左侧的宽度是固定的
-      _leftItemWidget(),
-      // 右侧的宽度是浮动的
-      _rightItemWidget()
-    ]);
+    return Scaffold(
+      appBar: AppBar(
+        title: InkWell(
+          child: Container(
+            padding: EdgeInsets.only(left: 15),
+            height: ScreenAdapter.height(60),
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(233, 233, 233, 0.8),
+                borderRadius: BorderRadius.circular(30)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.search),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "iPhone14 Pro Max",
+                  style: TextStyle(fontSize: ScreenAdapter.fontSize(28)),
+                )
+              ],
+            ),
+          ),
+          // 点击跳转搜索
+          onTap: () {
+            Navigator.of(context).pushNamed("/productSearch");
+          },
+        ),
+        leading:
+            IconButton(icon: Icon(Icons.center_focus_weak), onPressed: null),
+        actions: <Widget>[
+          IconButton(onPressed: null, icon: Icon(Icons.message))
+        ],
+      ),
+      body: Row(children: [
+        // 左侧的宽度是固定的
+        _leftItemWidget(),
+        // 右侧的宽度是浮动的
+        _rightItemWidget()
+      ]),
+    );
   }
 }
