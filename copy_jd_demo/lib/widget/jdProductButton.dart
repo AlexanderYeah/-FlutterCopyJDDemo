@@ -17,8 +17,9 @@ class JDProductButton extends StatelessWidget {
     return InkWell(
         onTap: callback!,
         child: Container(
+          width: double.infinity,
           height: ScreenAdapter.height(70),
-          margin: EdgeInsets.fromLTRB(5, 10, 20, 5),
+          margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: this.color,

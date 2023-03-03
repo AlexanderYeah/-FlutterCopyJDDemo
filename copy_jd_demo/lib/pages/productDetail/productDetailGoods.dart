@@ -1,9 +1,11 @@
 import 'package:copy_jd_demo/localData/productDetailData.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../services/screenAdaper.dart';
 import '../../widget/jdProductButton.dart';
 import '../../model/productDetailModel.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import '../../services/eventBus.dart';
 
 class ProductDetailGoodsPage extends StatefulWidget {
   var model;
@@ -19,7 +21,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
   // 选中的值
   String _selectedAttrValue = "";
   List _attr = [];
-
+  var _eventBus;
   /*****---DataHandle-----***/
   @override
   void initState() {
@@ -27,7 +29,21 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
     _detailModel = widget.model;
     this._attr = this._detailModel.arrtributes!;
     _loadAttrData();
+
+    // 传入 ProductDetailEvent 则说明只监听这个广播
+    this._eventBus = eventStatus.on<ProductDetailEvent>().listen((event) {
+      // 弹出筛选框
+      this._showFilterBottomView(context);
+    });
   }
+
+  void dispose() {
+    super.dispose();
+    // 取消监听
+    this._eventBus.cancel();
+  }
+  // 取消监听事件
+
   /*
   将数据构造成这样的数据 
   [{title: 红色, checked: true}, {title: 绿色, checked: false}, {title: 蓝色, checked: false}, {title: 橙色, checked: false}, {title: 紫色, checked: false}, {title: 灰色, checked: false}]

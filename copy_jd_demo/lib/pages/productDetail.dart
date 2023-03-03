@@ -7,6 +7,8 @@ import '.././widget/jdProductButton.dart';
 import '../model/productDetailModel.dart';
 import '../localData/productDetailData.dart';
 import '../widget/loadingWidget.dart';
+// 引入广播事件
+import '../services/eventBus.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({super.key});
@@ -72,6 +74,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             text: "加入购物车",
                             callback: () {
                               print("加入购物车");
+                              // 开启广播 将商品加入到购物车 打开筛选组件
+                              eventStatus.fire(ProductDetailEvent('AddCart'));
                             },
                           )),
                       Expanded(
@@ -81,6 +85,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             text: "立即购买",
                             callback: () {
                               print("立即购买");
+                              // 开启广播 将商品加入到购物车 打开筛选组件
+                              eventStatus.fire(ProductDetailEvent('AddCart'));
                             },
                           ))
                     ],
