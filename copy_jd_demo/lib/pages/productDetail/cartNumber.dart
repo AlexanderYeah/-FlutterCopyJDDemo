@@ -4,36 +4,31 @@ import '../../provider/cartProvider.dart';
 import '../../services/screenAdaper.dart';
 
 class CartNumber extends StatefulWidget {
-  var itemData;
-
-  CartNumber({super.key, this.itemData});
+  var detailModel;
+  CartNumber({super.key, this.detailModel});
   @override
   State<CartNumber> createState() => _CartNumberState();
 }
 
 class _CartNumberState extends State<CartNumber> {
-  var _itemData;
-  var cartProvider;
+  var _detailModel;
+
   @override
   void initState() {
     super.initState();
-    this._itemData = widget.itemData;
+    this._detailModel = widget.detailModel;
   }
 
   @override
   Widget build(BuildContext context) {
-    this.cartProvider = Provider.of<CartProvider>(context);
-
     Widget _leftBtn() {
       return InkWell(
         onTap: () {
           // 加法
-          this._itemData["cartCount"] = this._itemData["cartCount"] <= 1
+          this._detailModel.cartCount = this._detailModel.cartCount <= 1
               ? 1
-              : this._itemData["cartCount"] - 1;
-          setState(() {
-            this.cartProvider.changeCartItemCount();
-          });
+              : this._detailModel.cartCount - 1;
+          setState(() {});
         },
         child: Container(
           alignment: Alignment.center,
@@ -48,10 +43,8 @@ class _CartNumberState extends State<CartNumber> {
       return InkWell(
           onTap: () {
             // 加法
-            this._itemData["cartCount"] += 1;
-            setState(() {
-              this.cartProvider.changeCartItemCount();
-            });
+            this._detailModel.cartCount += 1;
+            setState(() {});
           },
           child: Container(
             alignment: Alignment.center,
@@ -66,7 +59,7 @@ class _CartNumberState extends State<CartNumber> {
         alignment: Alignment.center,
         width: ScreenAdapter.width(70),
         height: ScreenAdapter.height(45),
-        child: Text("${_itemData["cartCount"]}"),
+        child: Text("${this._detailModel.cartCount}"),
         decoration: BoxDecoration(
             border: Border(
           left: BorderSide(width: 1, color: Colors.black12),

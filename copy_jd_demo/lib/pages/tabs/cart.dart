@@ -79,9 +79,11 @@ class _CartPageState extends State<CartPage> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Checkbox(
-                                    onChanged: null,
+                                    onChanged: (value) {
+                                      cartProvider.checkedAll(value);
+                                    },
                                     activeColor: Colors.redAccent,
-                                    value: false,
+                                    value: cartProvider.isCheckedAll,
                                   ),
                                 ),
                                 Text(

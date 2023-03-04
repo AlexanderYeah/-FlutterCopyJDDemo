@@ -1,7 +1,9 @@
 import 'package:copy_jd_demo/model/productDetailModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../services/screenAdaper.dart';
 import 'cartNumber.dart';
+import '../../provider/cartProvider.dart';
 
 class CartItem extends StatefulWidget {
   Map itemData;
@@ -13,7 +15,7 @@ class CartItem extends StatefulWidget {
 
 class _CartItemState extends State<CartItem> {
   Map _itemData = {};
-
+  var cartProvider;
   @override
   void initState() {
     // TODO: implement initState
@@ -23,6 +25,8 @@ class _CartItemState extends State<CartItem> {
 
   @override
   Widget build(BuildContext context) {
+    this.cartProvider = Provider.of<CartProvider>(context);
+
     return Container(
       height: ScreenAdapter.height(160),
       width: ScreenAdapter.width(750),
@@ -36,8 +40,14 @@ class _CartItemState extends State<CartItem> {
             width: ScreenAdapter.width(60),
             height: ScreenAdapter.height(60),
             child: Checkbox(
-              value: false,
-              onChanged: (isSelected) {},
+              value: _itemData["checked"],
+              onChanged: (isSelected) {
+                // 取反操作
+                setState(() {
+                  _itemData["checked"] = !_itemData["checked"];
+                });
+                this.cartProvider.itemChange();
+              },
               activeColor: Colors.redAccent,
             ),
           ),
@@ -96,15 +106,13 @@ class _CartItemState extends State<CartItem> {
                             )),
                       ),
                       Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(
-                                0, 0, ScreenAdapter.width(15), 10),
-                            child: CartNumber(
-                              detailModel: ProductDetailModel(
-                                  title: "", cartCount: _itemData["cartCount"]),
-                            ),
-                          ))
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(
+                              0, 0, ScreenAdapter.width(15), 10),
+                          child: CartNumber(itemData: _itemData),
+                        ),
+                      ),
                       // 右边的数量组件
                     ],
                   )

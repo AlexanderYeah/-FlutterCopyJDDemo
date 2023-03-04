@@ -7,7 +7,7 @@ import '../../widget/jdProductButton.dart';
 import '../../model/productDetailModel.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import '../../services/eventBus.dart';
-import '../cart/cartNumber.dart';
+import 'cartNumber.dart';
 import '../../provider/cartProvider.dart';
 
 class ProductDetailGoodsPage extends StatefulWidget {
