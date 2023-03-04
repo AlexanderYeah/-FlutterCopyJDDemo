@@ -9,6 +9,7 @@ import '../localData/productDetailData.dart';
 import '../widget/loadingWidget.dart';
 // 引入广播事件
 import '../services/eventBus.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({super.key});

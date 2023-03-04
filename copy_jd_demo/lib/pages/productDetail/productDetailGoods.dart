@@ -1,4 +1,5 @@
 import 'package:copy_jd_demo/localData/productDetailData.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../services/cartService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -261,6 +262,9 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
                                       // 记得调用provider 更新数据
                                       _cartProvider.updateList();
                                       Navigator.of(context).pop();
+                                      Fluttertoast.showToast(
+                                          msg: "加入购物车成功",
+                                          gravity: ToastGravity.CENTER);
                                     },
                                   )),
                               Expanded(
