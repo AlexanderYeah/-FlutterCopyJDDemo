@@ -20,11 +20,11 @@ class _CartItemState extends State<CartItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    this._itemData = widget.itemData;
   }
 
   @override
   Widget build(BuildContext context) {
+    this._itemData = widget.itemData;
     this.cartProvider = Provider.of<CartProvider>(context);
 
     return Container(

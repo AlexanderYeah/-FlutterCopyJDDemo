@@ -17,13 +17,12 @@ class _CartNumberState extends State<CartNumber> {
   @override
   void initState() {
     super.initState();
-    this._itemData = widget.itemData;
   }
 
   @override
   Widget build(BuildContext context) {
     this.cartProvider = Provider.of<CartProvider>(context);
-
+    this._itemData = widget.itemData;
     Widget _leftBtn() {
       return InkWell(
         onTap: () {
