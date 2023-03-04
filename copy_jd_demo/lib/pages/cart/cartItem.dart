@@ -46,6 +46,7 @@ class _CartItemState extends State<CartItem> {
                 setState(() {
                   _itemData["checked"] = !_itemData["checked"];
                 });
+                // 改变没一项的时候 provider 里面的状态去循环遍历 是否是全选状态
                 this.cartProvider.itemChange();
               },
               activeColor: Colors.redAccent,

@@ -59,12 +59,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   child: Row(
                     children: <Widget>[
                       // 第一个购物车按钮
-                      Container(
-                        padding: EdgeInsets.only(top: 5),
-                        width: ScreenAdapter.width(200),
-                        height: ScreenAdapter.height(88),
-                        child: Column(
-                          children: [Icon(Icons.shopping_cart), Text("购物车")],
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pushNamed("/cart");
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(top: 5),
+                          width: ScreenAdapter.width(200),
+                          height: ScreenAdapter.height(88),
+                          child: Column(
+                            children: [Icon(Icons.shopping_cart), Text("购物车")],
+                          ),
                         ),
                       ),
                       Expanded(

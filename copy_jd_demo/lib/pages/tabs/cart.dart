@@ -12,42 +12,33 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  bool _isDeleteFlag = false;
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of<CartProvider>(context);
     // 购物车列表
     return Scaffold(
         appBar: AppBar(
-          title: InkWell(
-            child: Container(
-              padding: EdgeInsets.only(left: 15),
-              height: ScreenAdapter.height(60),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(233, 233, 233, 0.8),
-                  borderRadius: BorderRadius.circular(30)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.search),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "iPhone14 Pro Max",
-                    style: TextStyle(fontSize: ScreenAdapter.fontSize(28)),
-                  )
-                ],
-              ),
-            ),
-            // 点击跳转搜索
-            onTap: () {
-              Navigator.of(context).pushNamed("/productSearch");
-            },
+          title: Text(
+            "购物车",
+            style: TextStyle(color: Colors.black),
           ),
-          leading:
-              IconButton(icon: Icon(Icons.center_focus_weak), onPressed: null),
           actions: <Widget>[
-            IconButton(onPressed: null, icon: Icon(Icons.message))
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    _isDeleteFlag = !_isDeleteFlag;
+                  });
+                },
+                icon: _isDeleteFlag
+                    ? Icon(
+                        Icons.edit,
+                        color: Colors.black54,
+                      )
+                    : Icon(
+                        Icons.edit,
+                        color: Colors.black54,
+                      ))
           ],
         ),
         body: cartProvider.cartList.length != 0
@@ -90,23 +81,59 @@ class _CartPageState extends State<CartPage> {
                                   "全选",
                                   style: TextStyle(color: Colors.black54),
                                 ),
+                                SizedBox(
+                                  width: 12,
+                                ),
+                                // 保存两位小数
+                                Text(
+                                  "合计:￥" +
+                                      cartProvider.totalPrice
+                                          .toStringAsFixed(2),
+                                  style: TextStyle(
+                                      color: Colors.redAccent,
+                                      fontSize: ScreenAdapter.fontSize(32)),
+                                ),
                               ],
                             ),
-                            Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                  margin: EdgeInsets.only(right: 13),
-                                  alignment: Alignment.center,
-                                  width: ScreenAdapter.width(138),
-                                  height: ScreenAdapter.height(50),
-                                  decoration: BoxDecoration(
-                                      color: Colors.redAccent,
-                                      borderRadius: BorderRadius.circular(3)),
-                                  child: Text(
-                                    "立即结算",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ))
+                            // 如果编辑的话 显示删除  否则显示结算
+                            _isDeleteFlag == false
+                                ? Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                      margin: EdgeInsets.only(right: 13),
+                                      alignment: Alignment.center,
+                                      width: ScreenAdapter.width(138),
+                                      height: ScreenAdapter.height(50),
+                                      decoration: BoxDecoration(
+                                          color: Colors.redAccent,
+                                          borderRadius:
+                                              BorderRadius.circular(3)),
+                                      child: Text(
+                                        "立即结算",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ))
+                                : Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                        margin: EdgeInsets.only(right: 13),
+                                        alignment: Alignment.center,
+                                        width: ScreenAdapter.width(138),
+                                        height: ScreenAdapter.height(50),
+                                        decoration: BoxDecoration(
+                                            color: Colors.redAccent,
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                        child: InkWell(
+                                          onTap: () {
+                                            cartProvider.deleteItem();
+                                          },
+                                          child: Text(
+                                            "删除",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        )))
                           ],
                         ),
                       )),

@@ -15,6 +15,8 @@ class CartProvider with ChangeNotifier {
   int get cartListCount => cartList.length;
   // 是否是全选状态
   bool isCheckedAll = false;
+  // 总价格
+  double totalPrice = 0;
 
   // 初始化的时候加载数据
   CartProvider() {
@@ -47,6 +49,8 @@ class CartProvider with ChangeNotifier {
   // 这里是为了把数据保存到本地 从新进入购物车界面 展示修改过后的数量 否则的话 界面上的值改变了 但是本地的依然没有改变
   changeCartItemCount() {
     Storage.setString("cartList", json.encode(this.cartList));
+    // 就散价格
+    calculateTotalPrice();
     notifyListeners();
   }
 
@@ -58,6 +62,8 @@ class CartProvider with ChangeNotifier {
     // 赋值是否是全选的状态
     isCheckedAll = isSelected;
     Storage.setString("cartList", json.encode(this.cartList));
+    // 计算价格
+    calculateTotalPrice();
     notifyListeners();
   }
 
@@ -80,6 +86,38 @@ class CartProvider with ChangeNotifier {
   // 改变的时候重新循环遍历
   itemChange() {
     this.isCheckedAll = this.isCheckAll();
+    Storage.setString("cartList", json.encode(this.cartList));
+    calculateTotalPrice();
+    notifyListeners();
+  }
+
+  // 计算总价格
+  calculateTotalPrice() {
+    double tempTotalPrice = 0;
+    for (var i = 0; i < this.cartList.length; i++) {
+      if (cartList[i]["checked"] == true) {
+        tempTotalPrice = tempTotalPrice +
+            this.cartList[i]["price"] * this.cartList[i]["cartCount"];
+      }
+    }
+    this.totalPrice = tempTotalPrice;
+    notifyListeners();
+  }
+
+  // 删除数据
+  deleteItem() {
+    // 不能根据索引值 for 循环删除
+    // 思路是 创建一个数组，把没有勾选的数组摘出来 重新赋值给已经cartList，保存到本地 就实现了删除操作
+    List tempList = [];
+    for (var i = 0; i < this.cartList.length; i++) {
+      if (this.cartList[i]["checked"] == false) {
+        tempList.add(this.cartList[i]);
+      }
+    }
+    this.cartList = tempList;
+    // 执行一下计算总价
+    calculateTotalPrice();
+    // 重新保存数据
     Storage.setString("cartList", json.encode(this.cartList));
     notifyListeners();
   }
