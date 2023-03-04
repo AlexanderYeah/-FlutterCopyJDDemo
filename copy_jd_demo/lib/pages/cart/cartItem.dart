@@ -1,15 +1,26 @@
+import 'package:copy_jd_demo/model/productDetailModel.dart';
 import 'package:flutter/material.dart';
 import '../../services/screenAdaper.dart';
 import 'cartNumber.dart';
 
 class CartItem extends StatefulWidget {
-  const CartItem({super.key});
+  Map itemData;
+  CartItem({required this.itemData, super.key});
 
   @override
   State<CartItem> createState() => _CartItemState();
 }
 
 class _CartItemState extends State<CartItem> {
+  Map _itemData = {};
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    this._itemData = widget.itemData;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,7 +47,7 @@ class _CartItemState extends State<CartItem> {
             width: ScreenAdapter.width(120),
             height: ScreenAdapter.width(120),
             child: Image.network(
-              "https://imgservice.suning.cn/uimg1/b2c/image/mh_5GLu2Uex9j-uH19WnMg.jpg_800w_800h_4e",
+              _itemData["pic"],
               fit: BoxFit.cover,
             ),
           ),
@@ -52,7 +63,7 @@ class _CartItemState extends State<CartItem> {
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 12, 10, 2),
                     child: Text(
-                      "大风吹大风吹的大风吹的我的发型哈哈我的发型哈哈的大风吹的我的发型哈哈我的发型哈哈",
+                      "${_itemData["title"]}",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -63,19 +74,36 @@ class _CartItemState extends State<CartItem> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Container(
-                          margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
-                          child: Text(
-                            "￥666",
-                            style: TextStyle(color: Colors.redAccent),
-                          ),
-                        ),
+                            margin: EdgeInsets.fromLTRB(10, 0, 0, 10),
+                            child: Row(
+                              children: [
+                                // 价格
+                                Text(
+                                  "￥${_itemData["price"]}",
+                                  style: TextStyle(color: Colors.redAccent),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                // 属性
+                                Text(
+                                  "${_itemData["selectedAttr"]}",
+                                  style: TextStyle(
+                                      color: Colors.black45,
+                                      fontSize: ScreenAdapter.fontSize(26)),
+                                ),
+                              ],
+                            )),
                       ),
                       Align(
                           alignment: Alignment.centerRight,
                           child: Container(
                             padding: EdgeInsets.fromLTRB(
                                 0, 0, ScreenAdapter.width(15), 10),
-                            child: CartNumber(),
+                            child: CartNumber(
+                              detailModel: ProductDetailModel(
+                                  title: "", cartCount: _itemData["cartCount"]),
+                            ),
                           ))
                       // 右边的数量组件
                     ],

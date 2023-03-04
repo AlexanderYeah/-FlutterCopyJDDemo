@@ -8,6 +8,7 @@ import '../../model/productDetailModel.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import '../../services/eventBus.dart';
 import '../cart/cartNumber.dart';
+import '../../provider/cartProvider.dart';
 
 class ProductDetailGoodsPage extends StatefulWidget {
   var model;
@@ -24,6 +25,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
   String _selectedAttrValue = "";
   List _attr = [];
   var _eventBus;
+  var _cartProvider;
   /*****---DataHandle-----***/
   @override
   void initState() {
@@ -250,10 +252,14 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
                                   child: JDProductButton(
                                     color: Color.fromRGBO(253, 1, 0, 0.9),
                                     text: "加入购物车",
-                                    callback: () {
+                                    callback: () async {
                                       print("加入购物车");
                                       _getSelectedAttrValue();
-                                      CartService.addCart(this._detailModel);
+                                      //  addCart 是异步的方法 必须加载await 这个字段 否则后面更新列表为空
+                                      await CartService.addCart(
+                                          this._detailModel);
+                                      // 记得调用provider 更新数据
+                                      _cartProvider.updateList();
                                       Navigator.of(context).pop();
                                     },
                                   )),
@@ -278,6 +284,8 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
   }
 
   Widget build(BuildContext context) {
+    _cartProvider = Provider.of<CartProvider>(context);
+
     return Container(
       padding: EdgeInsets.all(0),
       child: ListView(
