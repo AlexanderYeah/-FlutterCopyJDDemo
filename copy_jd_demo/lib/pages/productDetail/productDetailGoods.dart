@@ -1,4 +1,5 @@
 import 'package:copy_jd_demo/localData/productDetailData.dart';
+import '../../services/cartService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/screenAdaper.dart';
@@ -6,6 +7,7 @@ import '../../widget/jdProductButton.dart';
 import '../../model/productDetailModel.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import '../../services/eventBus.dart';
+import '../cart/cartNumber.dart';
 
 class ProductDetailGoodsPage extends StatefulWidget {
   var model;
@@ -63,6 +65,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
     }
     setState(() {
       this._selectedAttrValue = tempList.join(",");
+      this._detailModel.selectedAttr = this._selectedAttrValue;
     });
   }
 
@@ -78,6 +81,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
         attr[i].attrList!.add(map1);
       }
     }
+
     print(this._attr[0].cate);
     print(this._attr[0].attrList);
   }
@@ -173,6 +177,31 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
         ],
       ));
     });
+    tempList.add(Divider(
+      height: 10,
+    ));
+    tempList.add(Align(
+      alignment: Alignment.centerLeft,
+      child: Row(
+        children: [
+          SizedBox(
+            width: 8,
+          ),
+          Text(
+            "数量:",
+            style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Container(
+            height: ScreenAdapter.height(45),
+            width: ScreenAdapter.width(164),
+            child: CartNumber(detailModel: _detailModel),
+          )
+        ],
+      ),
+    ));
     return tempList;
   }
 
@@ -202,6 +231,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
                           // 这个地方把state 传递过去
                           children: _categoryWidget(setBottomState)),
                     ),
+
                     // 下方的按钮
                     Positioned(
                         bottom: 0,
@@ -223,6 +253,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
                                     callback: () {
                                       print("加入购物车");
                                       _getSelectedAttrValue();
+                                      CartService.addCart(this._detailModel);
                                       Navigator.of(context).pop();
                                     },
                                   )),

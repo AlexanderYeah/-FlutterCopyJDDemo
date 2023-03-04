@@ -4,20 +4,35 @@ import '../../provider/cartProvider.dart';
 import '../../services/screenAdaper.dart';
 
 class CartNumber extends StatefulWidget {
-  const CartNumber({super.key});
-
+  var detailModel;
+  CartNumber({super.key, this.detailModel});
   @override
   State<CartNumber> createState() => _CartNumberState();
 }
 
 class _CartNumberState extends State<CartNumber> {
+  var _detailModel;
+
+  @override
+  void initState() {
+    super.initState();
+    this._detailModel = widget.detailModel;
+  }
+
   @override
   Widget build(BuildContext context) {
     var cartProvider = Provider.of<CartProvider>(context);
 
     Widget _leftBtn() {
       return InkWell(
-        onTap: null,
+        onTap: () {
+          // 加法
+
+          this._detailModel.cartCount = this._detailModel.cartCount <= 1
+              ? 1
+              : this._detailModel.cartCount - 1;
+          setState(() {});
+        },
         child: Container(
           alignment: Alignment.center,
           width: ScreenAdapter.width(45),
@@ -29,7 +44,11 @@ class _CartNumberState extends State<CartNumber> {
 
     Widget _rightBtn() {
       return InkWell(
-          onTap: null,
+          onTap: () {
+            // 加法
+            this._detailModel.cartCount += 1;
+            setState(() {});
+          },
           child: Container(
             alignment: Alignment.center,
             width: ScreenAdapter.width(45),
@@ -43,7 +62,7 @@ class _CartNumberState extends State<CartNumber> {
         alignment: Alignment.center,
         width: ScreenAdapter.width(70),
         height: ScreenAdapter.height(45),
-        child: Text("1"),
+        child: Text("${this._detailModel.cartCount}"),
         decoration: BoxDecoration(
             border: Border(
           left: BorderSide(width: 1, color: Colors.black12),

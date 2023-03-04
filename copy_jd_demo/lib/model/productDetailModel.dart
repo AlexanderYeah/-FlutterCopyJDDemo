@@ -6,17 +6,24 @@ class ProductDetailModel {
   double? oldPrice;
   int? saleCount;
   String? detainInfoUrl;
+  // 新增两个属性 添加购物车的时候使用
+  int? cartCount;
+  String? selectedAttr;
+
   List<ProductArrtributModel>? arrtributes;
 
-  ProductDetailModel(
-      {this.title,
-      this.imgs,
-      this.subTitle,
-      this.price,
-      this.oldPrice,
-      this.saleCount,
-      this.detainInfoUrl,
-      this.arrtributes});
+  ProductDetailModel({
+    this.title,
+    this.imgs,
+    this.subTitle,
+    this.price,
+    this.oldPrice,
+    this.saleCount,
+    this.detainInfoUrl,
+    this.arrtributes,
+    this.cartCount,
+    this.selectedAttr,
+  });
 
   ProductDetailModel.fromJson(Map<String, dynamic> json) {
     title = json['title'];
@@ -26,6 +33,8 @@ class ProductDetailModel {
     oldPrice = json['oldPrice'];
     saleCount = json['saleCount'];
     detainInfoUrl = json['detainInfoUrl'];
+    selectedAttr = "";
+    cartCount = 1;
     if (json['arrtributes'] != null) {
       arrtributes = <ProductArrtributModel>[];
       json['arrtributes'].forEach((v) {
