@@ -8,6 +8,8 @@ import '../pages/tabs/cart.dart';
 import '../pages/productList.dart';
 import '../pages/productSearch.dart';
 import '../pages/productDetail.dart';
+import '../pages/login.dart';
+import '../pages/login/registerFirst.dart';
 
 //配置路由
 final routes = {
@@ -18,6 +20,8 @@ final routes = {
   '/cart': (context) => CartPage(),
   '/productSearch': (context) => ProductSearchPage(),
   '/productDetail': (context) => ProductDetailPage(),
+  '/login': (context) => LoginPage(),
+  '/registerFirst': (context) => RegisterFirstPage(),
   '/productList': (context, {arguments}) =>
       ProductListPage(arguments: arguments)
 };

@@ -71,6 +71,10 @@ flutter:
     - images/HomeBanner/banner_2.jpeg
     - images/HomeBanner/banner_3.jpeg
     - images/HomeBanner/banner_4.jpeg
+    - images/2.0x/user_default.png
+    - images/3.0x/user_default.png
+    - images/user_default.png
+    - images/logo.png
     # - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/screenAdaper.dart';
+import '../../pages/login.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -34,19 +35,26 @@ class _UserPageState extends State<UserPage> {
               width: ScreenAdapter.width(120),
               height: ScreenAdapter.width(120),
               child: ClipOval(
-                child: Image.network(
-                  "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F202106%2F09%2F20210609081952_51ef5.thumb.1000_0.jpg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1680569811&t=0c3e444152c22b7e13283a1836abc219",
+                child: Image.asset(
+                  "images/user_default.png",
                   fit: BoxFit.cover,
                 ),
               )),
           SizedBox(
-            width: 30,
+            width: 15,
           ),
-          Container(
-            color: Colors.blue,
-            width: ScreenAdapter.width(80),
-            height: ScreenAdapter.height(80),
-          )
+          Expanded(
+              child: InkWell(
+            onTap: () {
+              // 登录或者注册
+              _loginOrRegisterAction();
+            },
+            child: Text(
+              "登录/注册",
+              style: TextStyle(
+                  color: Colors.white, fontSize: ScreenAdapter.fontSize(32)),
+            ),
+          )),
         ],
       ),
     );
@@ -74,6 +82,12 @@ class _UserPageState extends State<UserPage> {
             ],
           ),
         ));
+  }
+
+  /*****---Actions-----***/
+
+  _loginOrRegisterAction() {
+    Navigator.of(context).pushNamed("/login");
   }
 
   @override
