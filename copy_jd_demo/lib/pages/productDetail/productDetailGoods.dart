@@ -76,6 +76,7 @@ class _ProductDetailGoodsPageState extends State<ProductDetailGoodsPage> {
     var attr = this._attr;
     for (var i = 0; i < _detailModel.arrtributes!.length; i++) {
       var tempModel = _detailModel.arrtributes![i];
+
       for (var j = 0; j < tempModel.list!.length; j++) {
         var tempName = tempModel.list![j];
         bool isChecked = j == 0 ? true : false;
