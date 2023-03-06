@@ -276,7 +276,10 @@ class _EnsureOrderpageState extends State<EnsureOrderpage> {
                                         "提交订单",
                                         style: TextStyle(color: Colors.white),
                                       ),
-                                      onPressed: null,
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushNamed("/choosePay");
+                                      },
                                       style: ButtonStyle(
                                           backgroundColor:
                                               MaterialStateProperty.all(

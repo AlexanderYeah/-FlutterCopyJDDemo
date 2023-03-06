@@ -14,6 +14,7 @@ import '../pages/ensureOrder/ensuerOrder.dart';
 import '../pages/address/addressAdd.dart';
 import '../pages/address/addressEdit.dart';
 import '../pages/address/addressList.dart';
+import '../pages/ensureOrder/choosePay.dart';
 
 //配置路由
 final routes = {
@@ -30,6 +31,7 @@ final routes = {
   '/addressAdd': (context) => AddressAddPage(),
   '/addressEdit': (context) => AddressEditPage(),
   '/addressList': (context) => AddressListPage(),
+  '/choosePay': (context) => ChoosePayPage(),
   '/productList': (context, {arguments}) =>
       ProductListPage(arguments: arguments)
 };
