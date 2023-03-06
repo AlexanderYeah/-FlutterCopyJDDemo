@@ -182,6 +182,9 @@ class _EnsureOrderpageState extends State<EnsureOrderpage> {
                           title: Text("请添加收货地址"),
                           subtitle: Text("data"),
                           trailing: Icon(Icons.navigate_next),
+                          onTap: () {
+                            Navigator.of(context).pushNamed("/addressList");
+                          },
                         ),
                       ),
                     ),

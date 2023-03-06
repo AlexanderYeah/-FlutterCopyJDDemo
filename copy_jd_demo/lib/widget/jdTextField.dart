@@ -5,10 +5,12 @@ class JdTextFiled extends StatelessWidget {
   String? palceHolderStr;
   bool isPassword;
   var onChangeCallBack;
+  int maxLines;
   JdTextFiled(
       {this.palceHolderStr,
       this.isPassword = false,
       this.onChangeCallBack = null,
+      this.maxLines = 1,
       super.key});
 
   @override
@@ -23,6 +25,7 @@ class JdTextFiled extends StatelessWidget {
         ),
         height: ScreenAdapter.height(68),
         child: TextField(
+          maxLines: this.maxLines,
           autofocus: true,
           obscureText: this.isPassword,
           decoration: InputDecoration(

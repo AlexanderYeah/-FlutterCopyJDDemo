@@ -11,6 +11,9 @@ import '../pages/productDetail.dart';
 import '../pages/login.dart';
 import '../pages/login/registerFirst.dart';
 import '../pages/ensureOrder/ensuerOrder.dart';
+import '../pages/address/addressAdd.dart';
+import '../pages/address/addressEdit.dart';
+import '../pages/address/addressList.dart';
 
 //配置路由
 final routes = {
@@ -24,6 +27,9 @@ final routes = {
   '/login': (context) => LoginPage(),
   '/ensureOrder': (context) => EnsureOrderpage(),
   '/registerFirst': (context) => RegisterFirstPage(),
+  '/addressAdd': (context) => AddressAddPage(),
+  '/addressEdit': (context) => AddressEditPage(),
+  '/addressList': (context) => AddressListPage(),
   '/productList': (context, {arguments}) =>
       ProductListPage(arguments: arguments)
 };
