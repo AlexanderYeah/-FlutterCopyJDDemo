@@ -3,6 +3,7 @@ import 'pages/tabs/tab.dart';
 import 'routers/router.dart';
 import 'package:provider/provider.dart';
 import 'provider/cartProvider.dart';
+import 'provider/ensureOrderProvider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => EnsureOrderProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

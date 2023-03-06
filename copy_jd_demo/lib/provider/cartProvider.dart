@@ -121,4 +121,21 @@ class CartProvider with ChangeNotifier {
     Storage.setString("cartList", json.encode(this.cartList));
     notifyListeners();
   }
+
+  // 获取购物车中选中的数据
+  static getCartSelectedData() async {
+    List cartList = [];
+    List selectedDataList = [];
+    try {
+      cartList = json.decode(await Storage.getString("cartList"));
+      for (var i = 0; i < cartList.length; i++) {
+        if (cartList[i]["checked"] == true) {
+          selectedDataList.add(cartList[i]);
+        }
+      }
+    } catch (error) {
+      print(error);
+    }
+    return selectedDataList;
+  }
 }

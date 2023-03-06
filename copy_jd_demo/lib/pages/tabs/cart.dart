@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../cart/cartItem.dart';
 import '../cart/cartNumber.dart';
 import 'package:provider/provider.dart';
 import '../../provider/cartProvider.dart';
 import '../../services/screenAdaper.dart';
+import '../../provider/ensureOrderProvider.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -16,6 +18,8 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of<CartProvider>(context);
+    EnsureOrderProvider ensureOrderProvider =
+        Provider.of<EnsureOrderProvider>(context);
     // 购物车列表
     return Scaffold(
         appBar: AppBar(
@@ -114,9 +118,26 @@ class _CartPageState extends State<CartPage> {
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
-                                          onTap: () {
-                                            Navigator.of(context)
-                                                .pushNamed("/ensureOrder");
+                                          onTap: () async {
+                                            // 1 获取购物车选中的数据
+                                            List selectedList =
+                                                await CartProvider
+                                                    .getCartSelectedData();
+                                            print(selectedList);
+                                            // 2 保存购物车的数据 另一个页面可以获取
+                                            ensureOrderProvider
+                                                .changeEnsureOrderData(
+                                                    selectedList);
+                                            // 3 如果有选中的数据才进行跳转 没有的话则不进行跳转
+                                            if (selectedList.length > 0) {
+                                              // 跳转操作
+                                              Navigator.of(context)
+                                                  .pushNamed("/ensureOrder");
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg: "请选择结算商品",
+                                                  gravity: ToastGravity.CENTER);
+                                            }
                                           },
                                         )))
                                 : Align(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../services/screenAdaper.dart';
 import '../../widget/jdProductButton.dart';
+import '../../provider/ensureOrderProvider.dart';
+import 'package:provider/provider.dart';
 
 class EnsureOrderpage extends StatefulWidget {
   const EnsureOrderpage({super.key});
@@ -10,10 +12,11 @@ class EnsureOrderpage extends StatefulWidget {
 }
 
 class _EnsureOrderpageState extends State<EnsureOrderpage> {
+  EnsureOrderProvider? _ensureOrderPrivider;
   @override
-  Widget _productItem() {
+  Widget _productItem(element) {
     return Container(
-      margin: EdgeInsets.only(top: 7),
+      margin: EdgeInsets.only(top: 1),
       padding: EdgeInsets.only(bottom: 1),
       decoration: BoxDecoration(
           border: Border(
@@ -29,7 +32,7 @@ class _EnsureOrderpageState extends State<EnsureOrderpage> {
             width: ScreenAdapter.width(120),
             height: ScreenAdapter.width(120),
             child: Image.network(
-              "https://hbimg.huabanimg.com/07b029c67010c0a17a1c78fcbc92ce612de4cf3ae8dd-Oc4KXC_fw658",
+              element["pic"],
               fit: BoxFit.cover,
             ),
           ),
@@ -45,7 +48,7 @@ class _EnsureOrderpageState extends State<EnsureOrderpage> {
                   Container(
                     margin: EdgeInsets.fromLTRB(10, 12, 10, 2),
                     child: Text(
-                      "大风火车",
+                      "${element["title"]}",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -61,7 +64,7 @@ class _EnsureOrderpageState extends State<EnsureOrderpage> {
                               children: [
                                 // 价格
                                 Text(
-                                  "￥9998",
+                                  "￥${element["price"]}",
                                   style: TextStyle(color: Colors.redAccent),
                                 ),
                                 SizedBox(
@@ -69,7 +72,7 @@ class _EnsureOrderpageState extends State<EnsureOrderpage> {
                                 ),
                                 // 属性
                                 Text(
-                                  "红色",
+                                  "${element["selectedAttr"]}",
                                   style: TextStyle(
                                       color: Colors.black45,
                                       fontSize: ScreenAdapter.fontSize(26)),
@@ -82,7 +85,7 @@ class _EnsureOrderpageState extends State<EnsureOrderpage> {
                         child: Container(
                           padding: EdgeInsets.fromLTRB(
                               0, 14, ScreenAdapter.width(15), 15),
-                          child: Text("x2"),
+                          child: Text("x${element["cartCount"]}"),
                         ),
                       ),
                     ],
@@ -94,7 +97,53 @@ class _EnsureOrderpageState extends State<EnsureOrderpage> {
     );
   }
 
+  Widget _sectionTitleWidget(title) {
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(10, 10, 20, 0),
+        child: Text(
+          title,
+          textAlign: TextAlign.left,
+          style: TextStyle(fontSize: ScreenAdapter.fontSize(32)),
+        ),
+      ),
+    );
+  }
+
+  // 结算信息item
+  Widget _orderMoneyInfoItemWidget(title, content, color) {
+    return Container(
+      child: Container(
+          padding: EdgeInsets.fromLTRB(10, 10, 20, 0),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: ScreenAdapter.fontSize(28),
+                      color: Colors.black54),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  content,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: ScreenAdapter.fontSize(28), color: color),
+                ),
+              )
+            ],
+          )),
+    );
+  }
+
   Widget build(BuildContext context) {
+    this._ensureOrderPrivider = Provider.of<EnsureOrderProvider>(context);
+
     return Scaffold(
         appBar: AppBar(
             title: Text(
@@ -144,28 +193,50 @@ class _EnsureOrderpageState extends State<EnsureOrderpage> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      height: 300,
-                      margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      height:
+                          this._ensureOrderPrivider!.ensureOrderList.length *
+                                  108 +
+                              30,
+                      margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
-                              child: Text(
-                                "选购商品",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: ScreenAdapter.fontSize(32)),
-                              ),
-                            ),
-                          ),
+                          _sectionTitleWidget("结算商品"),
                           //
                           SizedBox(
                             height: 2,
                           ),
-                          _productItem(),
-                          _productItem(),
+                          Column(
+                            children: this
+                                ._ensureOrderPrivider!
+                                .ensureOrderList
+                                .map((element) {
+                              return _productItem(element);
+                            }).toList(),
+                          )
+                        ],
+                      ),
+                    ),
+                    // 商品订单结算信息
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      height: ScreenAdapter.height(210),
+                      margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _sectionTitleWidget("结算信息"),
+                          _orderMoneyInfoItemWidget(
+                              "运费:", "包邮免运费", Colors.black54),
+                          _orderMoneyInfoItemWidget(
+                              "折扣:", "立减￥0元", Colors.black54),
+                          _orderMoneyInfoItemWidget(
+                              "总价:",
+                              "¥${_ensureOrderPrivider!.totalPrice}",
+                              Colors.redAccent),
                         ],
                       ),
                     )
@@ -186,10 +257,10 @@ class _EnsureOrderpageState extends State<EnsureOrderpage> {
                               child: Container(
                                 margin: EdgeInsets.only(left: 20),
                                 child: Text(
-                                  "总价:1231",
+                                  "",
                                   style: TextStyle(
                                       fontSize: ScreenAdapter.fontSize(34),
-                                      color: Colors.redAccent),
+                                      color: Colors.white),
                                 ),
                               ),
                             ),
