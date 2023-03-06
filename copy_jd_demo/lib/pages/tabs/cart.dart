@@ -100,19 +100,25 @@ class _CartPageState extends State<CartPage> {
                                 ? Align(
                                     alignment: Alignment.centerRight,
                                     child: Container(
-                                      margin: EdgeInsets.only(right: 13),
-                                      alignment: Alignment.center,
-                                      width: ScreenAdapter.width(138),
-                                      height: ScreenAdapter.height(50),
-                                      decoration: BoxDecoration(
-                                          color: Colors.redAccent,
-                                          borderRadius:
-                                              BorderRadius.circular(3)),
-                                      child: Text(
-                                        "立即结算",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ))
+                                        margin: EdgeInsets.only(right: 13),
+                                        alignment: Alignment.center,
+                                        width: ScreenAdapter.width(138),
+                                        height: ScreenAdapter.height(50),
+                                        decoration: BoxDecoration(
+                                            color: Colors.redAccent,
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                        child: InkWell(
+                                          child: Text(
+                                            "立即结算",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .pushNamed("/ensureOrder");
+                                          },
+                                        )))
                                 : Align(
                                     alignment: Alignment.centerRight,
                                     child: Container(

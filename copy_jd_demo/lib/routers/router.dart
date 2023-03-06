@@ -10,6 +10,7 @@ import '../pages/productSearch.dart';
 import '../pages/productDetail.dart';
 import '../pages/login.dart';
 import '../pages/login/registerFirst.dart';
+import '../pages/ensureOrder/ensuerOrder.dart';
 
 //配置路由
 final routes = {
@@ -21,6 +22,7 @@ final routes = {
   '/productSearch': (context) => ProductSearchPage(),
   '/productDetail': (context) => ProductDetailPage(),
   '/login': (context) => LoginPage(),
+  '/ensureOrder': (context) => EnsureOrderpage(),
   '/registerFirst': (context) => RegisterFirstPage(),
   '/productList': (context, {arguments}) =>
       ProductListPage(arguments: arguments)
