@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/screenAdaper.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
+import '../../widget/jdProductButton.dart';
 
 class ChoosePayPage extends StatefulWidget {
   const ChoosePayPage({super.key});
@@ -11,7 +12,7 @@ class ChoosePayPage extends StatefulWidget {
 
 class _ChoosePayPageState extends State<ChoosePayPage> {
   @override
-
+  int _selectedPayMethod = 0;
   /*****---UI-----**/
 
   Widget _payHeaderWidget() {
@@ -79,7 +80,7 @@ class _ChoosePayPageState extends State<ChoosePayPage> {
               child: Center(
                 child: ListTile(
                   leading: Image.asset(
-                    "images/logo.png",
+                    "images/ali_pay_logo.jpeg",
                     width: ScreenAdapter.width(90),
                     height: ScreenAdapter.width(90),
                     fit: BoxFit.fill,
@@ -92,8 +93,13 @@ class _ChoosePayPageState extends State<ChoosePayPage> {
                   ),
                   trailing: RoundCheckBox(
                     size: 30,
-                    onTap: (value) {},
-                    isChecked: true,
+                    borderColor: Color.fromRGBO(238, 238, 238, 1),
+                    onTap: (value) {
+                      setState(() {
+                        this._selectedPayMethod = 0;
+                      });
+                    },
+                    isChecked: this._selectedPayMethod == 0 ? true : false,
                     checkedColor: Colors.redAccent,
                   ),
                 ),
@@ -103,11 +109,14 @@ class _ChoosePayPageState extends State<ChoosePayPage> {
               height: ScreenAdapter.height(120),
               child: Center(
                 child: ListTile(
-                  leading: Image.asset(
-                    "images/logo.png",
-                    width: ScreenAdapter.width(90),
-                    height: ScreenAdapter.width(90),
-                    fit: BoxFit.fill,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      "images/wechat_pay.jpeg",
+                      width: ScreenAdapter.width(90),
+                      height: ScreenAdapter.width(90),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                   title: Text(
                     "微信",
@@ -115,10 +124,34 @@ class _ChoosePayPageState extends State<ChoosePayPage> {
                         fontSize: ScreenAdapter.fontSize(36),
                         color: Colors.black87),
                   ),
-                  trailing: Checkbox(value: true, onChanged: null),
+                  trailing: RoundCheckBox(
+                    size: 30,
+                    borderColor: Color.fromRGBO(238, 238, 238, 1),
+                    onTap: (value) {
+                      setState(() {
+                        this._selectedPayMethod = 1;
+                      });
+                    },
+                    isChecked: this._selectedPayMethod == 1 ? true : false,
+                    checkedColor: Colors.redAccent,
+                  ),
                 ),
               )),
         ],
+      ),
+    );
+  }
+
+  // 立即支付
+  Widget _payButtonWidget() {
+    return Container(
+      width: ScreenAdapter.width(710),
+      child: JDProductButton(
+        text: "立即支付",
+        color: Colors.redAccent,
+        callback: () {
+          print("object");
+        },
       ),
     );
   }
@@ -153,6 +186,10 @@ class _ChoosePayPageState extends State<ChoosePayPage> {
               height: 20,
             ),
             _payMethodWidget(),
+            SizedBox(
+              height: 20,
+            ),
+            _payButtonWidget(),
           ],
         ),
       ),

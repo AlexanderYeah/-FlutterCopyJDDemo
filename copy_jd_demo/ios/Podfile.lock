@@ -10,6 +10,8 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - fluwx_no_pay (0.0.1):
+    - Flutter
   - OrderedSet (5.0.0)
   - shared_preferences_foundation (0.0.1):
     - Flutter
@@ -20,6 +22,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - fluwx_no_pay (from `.symlinks/plugins/fluwx_no_pay/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
 
 SPEC REPOS:
@@ -34,6 +37,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  fluwx_no_pay:
+    :path: ".symlinks/plugins/fluwx_no_pay/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/ios"
 
@@ -41,10 +46,11 @@ SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   fluttertoast: eb263d302cc92e04176c053d2385237e9f43fad0
+  fluwx_no_pay: 59cece18c95b95a83bdf912fd2ec86e40ecc707f
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: af6b891fb448119e2e3d0a226fcad7567aa13204
+PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 
 COCOAPODS: 1.11.3

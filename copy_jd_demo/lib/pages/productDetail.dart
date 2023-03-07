@@ -11,6 +11,10 @@ import '../widget/loadingWidget.dart';
 import '../services/eventBus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+// 分享功能
+import '../share/wechatShare.dart';
+import 'package:fluwx_no_pay/fluwx_no_pay.dart';
+
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({super.key});
 
@@ -19,13 +23,23 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
+  // 是否安装微信
+  bool _wxIsInstalled = false;
   /*****---Life Cycle-----***/
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _getProductData();
+    // 初始化分享的SDK
+    _initWechatSDK();
   }
+
+  _initWechatSDK() async {
+    print("_initWechatSDK");
+    await WxSdk.init();
+  }
+
   /*****---DataHandle-----***/
 
   ProductDetailModel _model = ProductDetailModel();
@@ -106,12 +120,30 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
   }
 
+  /*****---Actions-----***/
+  // 参考
+  // https://blog.csdn.net/qq_39132095/article/details/122349397
+  // 第一步检测是否安装微信 模拟器肯定是没有安装的
+  _wechatShareAction() async {
+    _wxIsInstalled = await WxSdk.wxIsInstalled();
+    print("安装微信了哈哈--${_wxIsInstalled}");
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
             // 放在容器内部 设定宽度 这样显得居中紧凑很多
             title: Container(
               width: ScreenAdapter.width(400),
@@ -133,11 +165,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             // 右上方的按钮
             actions: [
-              // IconButton(
-              //     onPressed: () {
-
-              //     },
-              //     icon: Icon(Icons.more_horiz))
+              IconButton(
+                  onPressed: () {
+                    // 分享功能的实现
+                    _wechatShareAction();
+                  },
+                  icon: Icon(
+                    Icons.share_rounded,
+                    color: Colors.black,
+                  ))
             ],
           ),
           body: _bodyWidget(),
