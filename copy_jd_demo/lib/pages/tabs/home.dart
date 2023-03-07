@@ -8,6 +8,7 @@ import 'dart:async';
 import '../../model/homeBannerModel.dart';
 import '../../config/config.dart';
 import '../../model/productListModel.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -86,6 +87,66 @@ class _HomePageState extends State<HomePage>
         _recommendList = model.result!;
       }
     });
+  }
+
+  Widget _cartProductItem(element) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed("/productDetail");
+      },
+      child: Container(
+        color: Colors.white,
+        child: Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black12, width: 1)),
+            child: Column(
+              children: [
+                Container(
+                    width: double.infinity,
+                    // 避免服务器返回的图片比例不一致
+                    child: AspectRatio(
+                      aspectRatio: 1 / 1,
+                      child: Image.network(element.pic),
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    element.title,
+                    maxLines: 7,
+                    // 溢出文字 ... 显示
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "¥${element.price}",
+                          style: TextStyle(color: Colors.red, fontSize: 16),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          "¥${element.oldPrice}",
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 16,
+                              decoration: TextDecoration.lineThrough),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )),
+      ),
+    );
   }
 
   // 推荐商品的数据
@@ -287,7 +348,23 @@ class _HomePageState extends State<HomePage>
           SizedBox(height: ScreenAdapter.height(15)),
           _hotProductList(),
           _titleWidget("热门推荐"),
-          recommendProductItem(),
+          // 热门推荐
+          // 商品列表
+          Container(
+              margin: EdgeInsets.all(10),
+              child: MasonryGridView.count(
+                // 这行代码很重要 一定要加上 不然container 不设置宽高的话 不显示
+                shrinkWrap: true,
+                // 本身不滚动 让外面的组件滚动
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: this._recommendList.length,
+                crossAxisCount: 2,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                itemBuilder: (context, index) {
+                  return _cartProductItem(this._recommendList[index]);
+                },
+              )),
         ],
       ),
     );

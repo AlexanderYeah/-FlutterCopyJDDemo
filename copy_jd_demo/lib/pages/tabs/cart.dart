@@ -7,6 +7,8 @@ import '../../provider/cartProvider.dart';
 import '../../services/screenAdaper.dart';
 import '../../provider/ensureOrderProvider.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../../localData/emptyCartListData.dart';
+import '../../model/productListModel.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -16,51 +18,134 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   bool _isDeleteFlag = false;
+  List _productList = [];
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadData();
+  }
+
+  /*****---DataHandle-----***/
+  _loadData() {
+    _productList = emptyCartListData;
+    //
+  }
+
+  /*****---UI-----***/
+  // 购物车的每一项
+  Widget _cartProductItem(index) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed("/productDetail");
+      },
+      child: Container(
+        color: Colors.white,
+        child: Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black12, width: 1)),
+            child: Column(
+              children: [
+                Container(
+                    width: double.infinity,
+                    // 避免服务器返回的图片比例不一致
+                    child: AspectRatio(
+                      aspectRatio: 1 / 1,
+                      child: Image.network(this._productList[index]["pic"]),
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    this._productList[index]["title"],
+                    maxLines: 7,
+                    // 溢出文字 ... 显示
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "¥${this._productList[index]["price"]}",
+                          style: TextStyle(color: Colors.red, fontSize: 16),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          "¥${this._productList[index]["oldPrice"]}",
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 16,
+                              decoration: TextDecoration.lineThrough),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )),
+      ),
+    );
+  }
 
   /*****---购物车位空-----***/
   Widget _emptyDataWidget() {
-    return Container(
-      color: Colors.white,
-      width: ScreenAdapter.width(750),
-      height: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 70,
+    return ListView(
+      children: [
+        SizedBox(
+          height: 70,
+        ),
+        Container(
+          width: ScreenAdapter.width(100),
+          height: ScreenAdapter.width(100),
+          child: Image.asset(
+            "images/cart_empty.png",
           ),
-          Container(
-            width: ScreenAdapter.width(100),
-            height: ScreenAdapter.width(100),
-            child: Image.asset(
-              "images/cart_empty.png",
-            ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          width: ScreenAdapter.width(400),
+          height: ScreenAdapter.height(80),
+          child: Text(
+            "空空如也,赶快去逛逛吧",
+            style: TextStyle(fontSize: ScreenAdapter.fontSize(30)),
+            textAlign: TextAlign.center,
           ),
-          SizedBox(
-            height: 20,
+        ),
+        Container(
+          width: ScreenAdapter.width(400),
+          height: ScreenAdapter.height(80),
+          child: Text(
+            "/ 你 / 可 / 能 / 会 / 喜 / 欢",
+            style: TextStyle(fontSize: ScreenAdapter.fontSize(30)),
+            textAlign: TextAlign.center,
           ),
-          Container(
-            width: ScreenAdapter.width(400),
-            height: ScreenAdapter.height(80),
-            child: Text(
-              "空空如也,赶快去逛逛吧",
-              style: TextStyle(fontSize: ScreenAdapter.fontSize(30)),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Container(
-            width: ScreenAdapter.width(400),
-            height: ScreenAdapter.height(80),
-            child: Text(
-              "/ 你 / 可 / 能 / 会 / 喜 / 欢",
-              style: TextStyle(fontSize: ScreenAdapter.fontSize(30)),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          // 商品列表
-        ],
-      ),
+        ),
+        // 商品列表
+        Container(
+            margin: EdgeInsets.all(10),
+            child: MasonryGridView.count(
+              // 这行代码很重要 一定要加上 不然container 不设置宽高的话 不显示
+              shrinkWrap: true,
+              // 本身不滚动 让外面的组件滚动
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: this._productList.length,
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              itemBuilder: (context, index) {
+                return _cartProductItem(index);
+              },
+            ))
+      ],
     );
   }
 
@@ -71,28 +156,29 @@ class _CartPageState extends State<CartPage> {
     // 购物车列表
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-            "购物车",
-            style: TextStyle(color: Colors.black),
-          ),
-          actions: <Widget>[
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    _isDeleteFlag = !_isDeleteFlag;
-                  });
-                },
-                icon: _isDeleteFlag
-                    ? Icon(
-                        Icons.edit,
-                        color: Colors.black54,
-                      )
-                    : Icon(
-                        Icons.edit,
-                        color: Colors.black54,
-                      ))
-          ],
-        ),
+            title: Text(
+              "购物车",
+              style: TextStyle(color: Colors.black),
+            ),
+            actions: cartProvider.cartList.length != 0
+                ? <Widget>[
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isDeleteFlag = !_isDeleteFlag;
+                          });
+                        },
+                        icon: _isDeleteFlag
+                            ? Icon(
+                                Icons.edit,
+                                color: Colors.black54,
+                              )
+                            : Icon(
+                                Icons.edit,
+                                color: Colors.black54,
+                              ))
+                  ]
+                : null),
         body: cartProvider.cartList.length != 0
             ? Stack(
                 //
